@@ -1,3 +1,4 @@
+import 'package:daloouser/src/pages/PreviewCategoriasPage.dart';
 import 'package:daloouser/src/pages/PreviewProductoPage.dart';
 import 'package:daloouser/src/pages/PreviewServicePage.dart';
 import 'package:daloouser/src/pages/SphashScreen.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-
     case SplashScreenViewRoute:
       return _getPageRoute(
         routeName: settings.name,
@@ -26,14 +26,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case PreviewServiceViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: PreviewServicePage((settings.arguments as List<String>)[0],(settings.arguments as List<String>)[1]),
+        viewToShow: PreviewServicePage((settings.arguments as List<String>)[0],
+            (settings.arguments as List<String>)[1]),
+      );
+    case PreviewCategoriaPageViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: PreviewCategoriasPage((settings.arguments as List<String>)[0],
+            (settings.arguments as List<String>)[1],(settings.arguments as List<String>)[2]),
       );
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(
-            body: Center(
-                child: Text('No route defined for ${settings.name}')),
-          ));
+                body: Center(
+                    child: Text('No route defined for ${settings.name}')),
+              ));
   }
 }
 

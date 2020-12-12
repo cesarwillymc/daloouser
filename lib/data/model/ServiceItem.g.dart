@@ -61,7 +61,5 @@ class ServiceItemAdapter extends TypeAdapter<ServiceItem> {
       ..writeByte(12)
       ..write(obj.idNumber);
   }
-
-  @override
-  int get typeId => 0;
+  int get typeId => 3;
 }

@@ -7,11 +7,14 @@ class CategoryModel {
   String id;
   @HiveField(1)
   String img;
+  @HiveField(2)
+  int total;
 
-  CategoryModel(this.id, this.img);
+  CategoryModel(this.id, this.img,this.total);
   CategoryModel.fromJson(Map<String, dynamic> json){
     id= json["_id"].toString();
     img= json["img"].toString();
+    total= int.parse(json["total"].toString());
   }
 
 

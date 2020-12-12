@@ -46,7 +46,5 @@ class PromocionesModelAdapter extends TypeAdapter<PromocionesModel> {
       ..writeByte(7)
       ..write(obj.productId);
   }
-
-  @override
-  int get typeId => 1;
+  int get typeId => 2;
 }

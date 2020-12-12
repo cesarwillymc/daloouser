@@ -59,7 +59,10 @@ class _TiendasPageState extends State<TiendasPage> {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                     onTap: () {
-                                      var modelo = model.categorias[index];
+                                      if(index!=0){
+                                        CategoryModel modelo = model.categorias[index];
+                                        locator<NavigationService>().navigateTo(PreviewCategoriaPageViewRoute,arguments: [modelo.id,modelo.img,modelo.total.toString()]);
+                                      }
                                     },
                                     child: CardCategorias(
                                         selected: index == 0 ? true : false,

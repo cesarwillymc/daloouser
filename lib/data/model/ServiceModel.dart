@@ -11,8 +11,12 @@ class ServiceModel {
   bool activeAccount;
   bool isOpen;
   String imagen;
+
   String serviceId;
   String categoriaId;
+
+  String ratingNumber;
+
 
   ServiceModel(
       {
@@ -29,7 +33,8 @@ class ServiceModel {
         this.isOpen,
         this.imagen,
         this.serviceId,
-        this.categoriaId});
+        this.categoriaId,
+        this.ratingNumber,});
 
   ServiceModel.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -41,11 +46,37 @@ class ServiceModel {
     category = json['category'];
     description = json['description'];
     horario = json['horario'];
-    activeAccount = json['activeAccount'];
-    isOpen = json['isOpen'];
+    activeAccount = json['activeAccount'] as bool;
+    isOpen = json['isOpen'] as bool;
     imagen = json['imagen'];
     serviceId = json['serviceId'];
     categoriaId = json['categoriaId'];
+  }
+  ServiceModel.fromJson2(Map<String, dynamic> json) {
+    id = json['id'];
+    imagen = json['img'];
+    name = json['name'];
+    isOpen = json['isOpen'];
+    address = json['address'];
+    ratingNumber = json['ratingNumber'];
+    categoriaId = json['categoryId'];
+    category = json['category'];
+  }
+  //GetInfo
+  ServiceModel.fromJson3(Map<String, dynamic> json) {
+    name = json['name'];
+    address = json['address'];
+    latitude = double.parse(json['latitude'].toString());
+    longitude = double.parse(json['longitude'].toString());
+    category = json['category'];
+    description = json['description'];
+    horario = json['horario'];
+    activeAccount = json['activeAccount'] as bool;
+    isOpen = json['isOpen'] as bool;
+    imagen = json['imagen'] ;
+    serviceId = json['serviceId'];
+    categoriaId = json['categoriaId'];
+    ratingNumber = double.parse(json['rating'].toString()).toString();
   }
 
   Map<String, dynamic> toJson() {

@@ -1,11 +1,13 @@
 import 'dart:ffi';
 
 import 'package:daloouser/data/model/CategoryModel.dart';
+import 'package:daloouser/data/model/ListServices.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
 import 'package:daloouser/data/model/PromocionesModel.dart';
 import 'package:daloouser/data/model/ServiceItem.dart';
+import 'package:daloouser/data/model/ServiceModel.dart';
 import 'package:daloouser/data/network/DialogService.dart';
 import 'package:daloouser/data/network/MainRepository.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
@@ -81,11 +83,11 @@ class ProductsViewModel extends BaseModel {
       print("Categorias $updatedCategory");
       if (cat != null) {
         _categorias = updatedCategory;
-        _categorias.insert(0, CategoryModel("Todo", ""));
+        _categorias.insert(0, CategoryModel("Todo", "",1));
         notifyListeners();
         setBusy(false);
       } else {
-        _categorias = [CategoryModel("Todo", "")];
+        _categorias = [CategoryModel("Todo", "",1)];
       }
     });
   }
@@ -108,6 +110,24 @@ class ProductsViewModel extends BaseModel {
       }
     });
   }
+  ServiceModel _infoService;
+
+  ServiceModel get infoService => _infoService;
+
+  void getServiceInfoById(String id) {
+    setBusy(true);
+    _mainRepository.getServiceInfoById(id).then((cat) {
+      ServiceModel updatedCategory = cat;
+      print("getListProductswithService subido $updatedCategory");
+      if (cat != null) {
+        _infoService = cat;
+        notifyListeners();
+        setBusy(false);
+      } else {
+        _infoService = null;
+      }
+    });
+  }
 
   ProductoData _productData;
 
@@ -127,5 +147,52 @@ class ProductsViewModel extends BaseModel {
         _productData = null;
       }
     });
+  }
+  int totalPaginas=0;
+  int totalNetwoksItem;
+  String categoriaId;
+  Future<List<ServiceModel>> getServicesByCategory(int offset) async{
+   //setBusy(true);
+    var valueBoolean =false;
+    ListServices lista;
+    if(totalNetwoksItem==null){
+      valueBoolean=true;
+    }else{
+      print("getServicesByCategory off $totalNetwoksItem  $totalPaginas");
+      if(totalNetwoksItem/10>0){
+        if((totalNetwoksItem - (totalPaginas + 10)) > 1){
+          totalPaginas+=10;
+          valueBoolean=true;
+        }
+      }
+    }
+
+
+    if(valueBoolean){
+      _mainRepository.getServicesByCategory(categoriaId,totalPaginas).listen((cat) {
+        lista=cat;
+        totalNetwoksItem=lista.total;
+        if (cat != null) {
+          if(lista.total/10>0){
+            if((lista.total - (totalPaginas + 10)) > 1){
+              totalPaginas+=10;
+            }
+          }
+          print("getServicesByCategory datos ${cat.total}");
+          //notifyListeners();
+          // setBusy(false);
+        }
+      });
+      await Future.delayed(
+        Duration(milliseconds: 1000),
+      );
+      if(lista.data!=null){
+        return  lista.data;
+      }else{
+        return [];
+      }
+    }else{
+      return [];
+    }
   }
 }

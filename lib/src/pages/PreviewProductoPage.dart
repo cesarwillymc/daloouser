@@ -7,6 +7,7 @@ import 'package:daloouser/src/widget/search/Search.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:daloouser/utils/FunctionsUitls.dart';
 import 'package:daloouser/viewModel/ProductsViewModel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -84,13 +85,20 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        model.productData.itemname,
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
+                                      Flexible(
+                                        child: Container(
+                                          child: Text(
+                                            model.productData.itemname,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
                                       ),
                                       Row(
                                         children: [

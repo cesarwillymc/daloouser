@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class TipePriceCardInactive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 50,
       child: Card(
         color: active ? primaryColor : Colors.white,
@@ -20,11 +21,14 @@ class TipePriceCardInactive extends StatelessWidget {
             width: 1,
           ),
         ),
-        child: Center(
-          child: Text(
-            palabra,
-            textScaleFactor: 1.2,
-            style: TextStyle(color: active ? Colors.white:primaryColor,fontSize: 18),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: Center(
+            child: AutoSizeText(
+              palabra,
+              textScaleFactor: 1.2,
+              style: TextStyle(color: active ? Colors.white:primaryColor,fontSize: 18),
+            ),
           ),
         ),
       ),

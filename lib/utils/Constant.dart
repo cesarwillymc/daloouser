@@ -10,6 +10,7 @@ const String MainScreenViewRoute = "MainScreenViewRoute";
 const String SplashScreenViewRoute = "SplashScreen";
 const String PreviewProductViewRoute = "PreviewProductViewRoute";
 const String PreviewServiceViewRoute = "PreviewServiceViewRoute";
+const String PreviewCategoriaPageViewRoute = "PreviewCategoriaPageViewRoute";
 
 const String BASE_URL_API = "http://64.52.85.15:4000/api/";
 

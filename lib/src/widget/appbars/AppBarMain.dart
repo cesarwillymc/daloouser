@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ class AppBarMain extends AppBar {
   AppBarMain({this.searchpressed, this.isVisibleLocation, this.titulo}):super(
     backgroundColor: Colors.white,
     elevation: 0,
-    centerTitle: true,
     iconTheme: IconThemeData(color: Colors.black),
     actions: [
       IconButton(
@@ -35,7 +35,7 @@ class AppBarMain extends AppBar {
           ),
           Flexible(
               child: Container(
-                  child: Text(
+                  child: AutoSizeText(
                     "Av Selva Alegre 534aqaaaaaaaaaaaa",
                     style: TextStyle(color: Colors.black, fontSize: 15),
                     overflow: TextOverflow.ellipsis,

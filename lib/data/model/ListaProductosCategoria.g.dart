@@ -29,7 +29,5 @@ class ListaProductosCategoriaAdapter
       ..writeByte(1)
       ..write(obj.items);
   }
-
-  @override
-  int get typeId => 4;
+  int get typeId => 1;
 }
