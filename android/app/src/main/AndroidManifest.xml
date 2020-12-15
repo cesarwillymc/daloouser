@@ -18,6 +18,9 @@
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyATz3u8hZqJTY6ibagqBNKaSpsgdMnwjtA" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

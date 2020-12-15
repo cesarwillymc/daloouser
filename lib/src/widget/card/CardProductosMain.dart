@@ -30,7 +30,7 @@ class CardProductosMain extends StatelessWidget{
               ),
               InkWell(
                 onTap: (){
-
+                  locator<NavigationService>().navigateTo(PreviewServiceViewRoute,arguments: [model.service.categoriaId,model.service.id]);
                 },
                 child: Text("Ver mas",textAlign: TextAlign.end,style: TextStyle(color: primaryColor,fontSize: 14,fontWeight: FontWeight.bold),),
               )

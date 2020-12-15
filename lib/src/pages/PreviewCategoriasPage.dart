@@ -1,13 +1,17 @@
 import 'package:daloouser/data/model/ServiceItem.dart';
 import 'package:daloouser/data/model/ServiceModel.dart';
+import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:daloouser/src/widget/card/CardCategorias.dart';
 import 'package:daloouser/src/widget/card/SearchCardItem.dart';
+import 'package:daloouser/utils/Constant.dart';
 import 'package:daloouser/viewModel/ProductsViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pagination/pagination.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../Locator.dart';
 
 class PreviewCategoriasPage extends StatefulWidget{
   String title;
@@ -51,7 +55,7 @@ class _PreviewCategoriasPageState extends State<PreviewCategoriasPage> {
 
                 return GestureDetector(
                   onTap: () {
-                    //var modelo = model.categorias[index];
+                    locator<NavigationService>().navigateTo(PreviewServiceViewRoute,arguments: [service.categoriaId,service.id]);
                   },
                   child: SearchCardItem(
                       model: ServiceItem(

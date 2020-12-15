@@ -1,7 +1,11 @@
 import 'dart:ffi';
 
+import 'package:daloouser/data/model/CategoriasModel.dart';
 import 'package:daloouser/data/model/CategoryModel.dart';
+import 'package:daloouser/data/model/ComentariosModel.dart';
+import 'package:daloouser/data/model/ComentariosStartModel.dart';
 import 'package:daloouser/data/model/ListServices.dart';
+import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
@@ -193,6 +197,127 @@ class ProductsViewModel extends BaseModel {
       }
     }else{
       return [];
+    }
+  }
+  List<CategoriasModel> _subcategoria;
+
+  List<CategoriasModel>  get subcategoria => _subcategoria;
+
+  void getSubCategoriaSpinner(String id) {
+    setBusy(true);
+    _mainRepository.getSubCategoriaSpinner(id).then((cat) {
+      List<CategoriasModel> updatedCategory = cat;
+      if (cat != null) {
+        var price=CategoriasModel("Buscar todos","");
+        updatedCategory.insert(0,price);
+        _subcategoria = updatedCategory;
+        notifyListeners();
+        setBusy(false);
+      } else {
+        _subcategoria = [];
+      }
+    });
+  }
+  List<ComentariosModel> _comentariosList;
+
+  List<ComentariosModel>  get comentariosList => _comentariosList;
+
+  void getComentariosServices(String id) {
+    setBusy(true);
+    _mainRepository.getComentariosServices(id).then((cat) {
+      List<ComentariosModel> updatedCategory = cat;
+      if (cat != null) {
+        _comentariosList = updatedCategory;
+        notifyListeners();
+        setBusy(false);
+      } else {
+        _comentariosList = [];
+        notifyListeners();
+        setBusy(false);
+      }
+    });
+  }
+  List<ComentariosStartModel> _comentariosStartList;
+
+  List<ComentariosStartModel>  get comentariosStartList => _comentariosStartList;
+  void getComentariosStartServices(String id) {
+    setBusy(true);
+    _mainRepository.getComentariosStartServices(id).then((cat) {
+      if (cat != null) {
+        _comentariosStartList= cat;
+        setBusy(false);
+        notifyListeners();
+      } else {
+        _comentariosStartList= [];
+        setBusy(false);
+        notifyListeners();
+      }
+    });
+  }
+
+  int totalPaginasProducts=0;
+  int totalNetwoksItemProducts;
+
+  List<ListaProductItem> _productosCategoria;
+
+  List<ListaProductItem>  get productosCategoria => _productosCategoria;
+
+  Future<List<ListaProductItem>>  getProductsByCategoryData(int a)async{
+    return productosCategoria;
+  }
+  String spinnerData;
+  Future<List<ListaProductItem>> getProductsByCategory(int index) async{
+    setBusy(true);
+    var valueBoolean =false;
+    List<ListaProductItem> lista;
+    if(totalNetwoksItemProducts==null){
+      valueBoolean=true;
+    }else{
+      print("getProductsByCategory off $totalNetwoksItemProducts  $totalPaginasProducts");
+      if(totalNetwoksItemProducts/10>0){
+        if((totalNetwoksItemProducts - (totalPaginasProducts + 10)) > 1){
+          totalPaginasProducts+=10;
+          valueBoolean=true;
+        }
+      }
+    }
+
+
+    if(valueBoolean){
+      _mainRepository.getProductsByCategoria(spinnerData,totalPaginasProducts,categoriaId).then((cat) {
+        lista=cat;
+        totalNetwoksItemProducts=lista[0].total;
+        if (cat != null) {
+          if(lista[0].total/10>0){
+            if((lista[0].total - (totalPaginasProducts + 10)) > 1){
+              totalPaginasProducts+=10;
+            }
+          }
+          print("getServicesByCategory datos ${cat[0].total}");
+
+        }
+      });
+      await Future.delayed(
+        Duration(milliseconds: 500),
+      );
+      if(lista==null){
+        await Future.delayed(
+          Duration(milliseconds: 1200),
+        );
+      }
+      if(lista!=null){
+        print("getServicesByCategory Entro lista no null");
+        _productosCategoria=  lista;
+        notifyListeners();
+        setBusy(false);
+        return  _productosCategoria;
+      }
+    }else{
+      print("getServicesByCategory valueBolean false");
+      _productosCategoria= [];
+      notifyListeners();
+      setBusy(false);
+      return  [];
     }
   }
 }

@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:daloouser/data/model/CategoriasModel.dart';
 import 'package:daloouser/data/model/CategoryModel.dart';
+import 'package:daloouser/data/model/ComentariosModel.dart';
+import 'package:daloouser/data/model/ComentariosStartModel.dart';
 import 'package:daloouser/data/model/ListServices.dart';
+import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
@@ -71,7 +75,7 @@ class MainRepository{
       throw Exception("Error en la red");
     }
   }
-  //Get Producto Item
+  //Get Services Item
   Stream<ListServices> getServicesByCategory(String categoria,int desde) async* {
     final String url="customer/byCategories?desde=$desde&categoria=$categoria";
 
@@ -98,4 +102,73 @@ class MainRepository{
       throw Exception("Error en la red");
     }
   }
+
+  //Get SUB CATEGORIA SPINNER
+  Future<List<CategoriasModel>> getSubCategoriaSpinner(String id) async {
+    final String url="customer/subcategorias/$id";
+
+    var palabraUrl=BASE_URL_API+url;
+    final response =await http.get(palabraUrl);
+    if(response.statusCode==200){
+      var datos = await Stream.fromIterable(json.decode(response.body)).asyncMap((event) => new CategoriasModel.fromJson(event)).toList();
+      return datos;
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+  //Get producs By Categoria
+  Future<List<ListaProductItem>> getProductsByCategoria(String categoria,int desde,String id) async {
+    final String url="customer/categoryById/$id/?desde=$desde&tipe=$categoria";
+
+    var palabraUrl=BASE_URL_API+url;
+    print("getServicesByCategory $palabraUrl");
+    final response =await http.get(palabraUrl);
+    if(response.statusCode==200){
+
+      var datos = json.decode(response.body);
+
+      var total = int.parse(datos["general"]['total'].toString());
+      if (datos['lista'] != null) {
+       return  await Stream.fromIterable(datos['lista']).asyncMap((event) => new ListaProductItem.fromJson(event,total)).toList();
+      }else{
+        return [];
+      }
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+
+   //Load Comentarios
+  Future<List<ComentariosModel>> getComentariosServices(String id) async {
+    final String url="customer/comentAndStarts/$id";
+
+    var palabraUrl=BASE_URL_API+url;
+    print("getServicesByCategory $palabraUrl");
+    final response =await http.get(palabraUrl);
+    if(response.statusCode==200){
+
+      var datos = json.decode(response.body);
+
+      return  await Stream.fromIterable(datos).asyncMap((event) => new ComentariosModel.fromJson(event)).toList();
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+  //Load Comentarios
+  Future<List<ComentariosStartModel>> getComentariosStartServices(String id) async {
+    final String url="customer/comentStarts/$id";
+
+    var palabraUrl=BASE_URL_API+url;
+    print("getServicesByCategory $palabraUrl");
+    final response =await http.get(palabraUrl);
+    if(response.statusCode==200){
+
+      var datos = json.decode(response.body);
+
+      return  await Stream.fromIterable(datos).asyncMap((event) => new ComentariosStartModel.fromJson(event)).toList();
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+
 }

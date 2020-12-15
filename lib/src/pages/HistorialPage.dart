@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ServiceItem.dart';
 import 'package:daloouser/data/model/ServiceModel.dart';
+import 'package:daloouser/src/pages/productosServices/ComentariosPage.dart';
+import 'package:daloouser/src/pages/productosServices/InformationServicePage.dart';
+import 'package:daloouser/src/pages/productosServices/ListaProductosPage.dart';
 import 'package:daloouser/src/pages/productosServices/ProductosServicesTopInfo.dart';
 import 'package:daloouser/src/widget/buttons/TipePriceCardInactive.dart';
 import 'package:daloouser/src/widget/card/CardCategorias.dart';
@@ -18,14 +21,20 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
 class HistorialPage extends StatefulWidget {
-  String id= "5f935e08cc89981c8fde0990";
+  String id= "5f934593cc89981c8fde097c";
+  String categoria="5f90a562cc89981c8fde095b";
   @override
   _HistorialPageState createState() => _HistorialPageState();
 }
 
 class _HistorialPageState extends State<HistorialPage> {
+  List<Widget> pages;
   @override
   Widget build(BuildContext context) {
+    pages= [ListaProductosPage(widget.categoria,widget.id),ComentariosPage(widget.id),InformationServicePage()];
+    Widget pageActual=pages[0];
+
+    var _controller=ScrollController();
     var texto =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
     return Scaffold(
@@ -47,9 +56,7 @@ class _HistorialPageState extends State<HistorialPage> {
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
-                        : FlexibleSpaceBar(
-                            centerTitle: true,
-                            background: ProductosServicesTopInfo(model.infoService)),
+                        : _servicesHome(model.infoService),
                   )),
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
@@ -62,84 +69,28 @@ class _HistorialPageState extends State<HistorialPage> {
                       Tab(text: "Comentarios"),
                       Tab(text: "Informacion"),
                     ],
-                    onTap: (index) {},
+                    onTap: (index) {
+                      setState(() {
+                        print("historial page $index");
+                        pageActual = pages[index];
+                      });
+                    },
                   ),
                 ),
-                pinned: true,
+                pinned: false,
               ),
             ];
           },
-          body: Center(
-            child: Text("Sample text"),
-          ),
+          body: TabBarView(children: pages),
         ),
       ),
     );
   }
-
-  Widget _pagination() {
-    return ViewModelBuilder<ProductsViewModel>.reactive(
-        viewModelBuilder: () => ProductsViewModel(),
-        builder: (context, model, child) => PaginationList<ServiceModel>(
-              itemBuilder: (_, service) {
-                return GestureDetector(
-                  onTap: () {
-                    //var modelo = model.categorias[index];
-                  },
-                  child: SearchCardItem(
-                      model: ServiceItem(
-                          service.category,
-                          service.id,
-                          service.id,
-                          service.imagen,
-                          service.name,
-                          service.address,
-                          service.isOpen,
-                          true,
-                          service.ratingNumber,
-                          service.categoriaId,
-                          service.categoriaId,
-                          service.name,
-                          0)),
-                );
-              },
-              onError: (dynamic error) => Center(
-                child: Text('${error.toString()}'),
-              ),
-              onEmpty: Center(
-                child: Text('Empty List'),
-              ),
-              onLoading: _shimerProduct(model),
-              pageFetch: model.getServicesByCategory,
-//,String id "Restaurantes"
-            ));
-  }
-
-  Widget _shimerProduct(ProductsViewModel model) {
-    model.categoriaId = "Restaurantes";
-    return Shimmer.fromColors(
-        baseColor: Colors.grey,
-        highlightColor: Colors.black54,
-        child: Column(
-          children: [
-            SearchCardItem(
-              model: ServiceItem(
-                  "", "", "", "", "", "", true, true, "", "", "", "", 20),
-            ),
-            SearchCardItem(
-              model: ServiceItem(
-                  "", "", "", "", "", "", true, true, "", "", "", "", 20),
-            ),
-            SearchCardItem(
-              model: ServiceItem(
-                  "", "", "", "", "", "", true, true, "", "", "", "", 20),
-            ),
-            SearchCardItem(
-              model: ServiceItem(
-                  "", "", "", "", "", "", true, true, "", "", "", "", 20),
-            )
-          ],
-        ));
+  Widget _servicesHome(ServiceModel infoService){
+    pages[2]= InformationServicePage(model: infoService,);
+    return FlexibleSpaceBar(
+        centerTitle: true,
+        background: ProductosServicesTopInfo(infoService));
   }
 }
 
