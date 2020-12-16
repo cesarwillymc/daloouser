@@ -162,7 +162,6 @@ class MainRepository{
     print("getServicesByCategory $palabraUrl");
     final response =await http.get(palabraUrl);
     if(response.statusCode==200){
-
       var datos = json.decode(response.body);
 
       return  await Stream.fromIterable(datos).asyncMap((event) => new ComentariosStartModel.fromJson(event)).toList();
@@ -170,5 +169,28 @@ class MainRepository{
       throw Exception("Error en la red");
     }
   }
+  //Get New Price
+  Future<List<int>> getRutasGoogle(String ruta) async {
+    final String url="https://maps.googleapis.com/$ruta";
+
+    print("RutasGoogle $url");
+    final response =await http.get(url);
+    if(response.statusCode==200){
+
+      var datos = json.decode(response.body);
+      print("RutasGoogle  ${datos["routes"][0]["legs"]}");
+      var time=0;
+      var distance=0;
+      await Stream.fromIterable(datos["routes"][0]["legs"]).forEach((element) {
+        time+=int.parse(element["duration"]["value"].toString());
+        distance+=int.parse(element["distance"]["value"].toString());
+      });
+      return [time,distance];
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+
+
 
 }

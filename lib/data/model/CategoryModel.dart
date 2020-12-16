@@ -1,7 +1,7 @@
 
 import 'package:hive/hive.dart';
 part 'CategoryModel.g.dart';
-@HiveType()
+@HiveType(typeId: 1)
 class CategoryModel {
   @HiveField(0)
   String id;

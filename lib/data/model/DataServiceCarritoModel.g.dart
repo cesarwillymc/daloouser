@@ -1,38 +1,42 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'CategoryModel.dart';
+part of 'DataServiceCarritoModel.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
+class DataServiceCarritoModelAdapter
+    extends TypeAdapter<DataServiceCarritoModel> {
   @override
-  final int typeId = 1;
+  final int typeId = 5;
 
   @override
-  CategoryModel read(BinaryReader reader) {
+  DataServiceCarritoModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CategoryModel(
+    return DataServiceCarritoModel(
       fields[0] as String,
-      fields[1] as String,
-      fields[2] as int,
+      fields[2] as double,
+      fields[1] as double,
+      fields[3] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CategoryModel obj) {
+  void write(BinaryWriter writer, DataServiceCarritoModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.img)
+      ..write(obj.latitude)
       ..writeByte(2)
-      ..write(obj.total);
+      ..write(obj.longitude)
+      ..writeByte(3)
+      ..write(obj.nombreService);
   }
 
   @override
@@ -41,7 +45,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CategoryModelAdapter &&
+      other is DataServiceCarritoModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

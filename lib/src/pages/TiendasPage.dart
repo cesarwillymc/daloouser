@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../Locator.dart';
+import 'CarritoPage.dart';
 
 class TiendasPage extends StatefulWidget {
   @override
@@ -20,10 +21,18 @@ class TiendasPage extends StatefulWidget {
 }
 
 class _TiendasPageState extends State<TiendasPage> {
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     var listaWidges = [CardOfertas(), CardOfertas()];
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.shopping_cart,color: Colors.white,),
+          backgroundColor: primaryColor,
+          onPressed: (){
+            _navigationService.navigateTo(MainScreenViewRoute,arguments:CarritoPage());
+          },
+        ) ,
         backgroundColor: Colors.white,
         body: ListView(
           scrollDirection: Axis.vertical,

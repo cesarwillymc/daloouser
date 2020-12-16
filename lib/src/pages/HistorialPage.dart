@@ -8,6 +8,7 @@ import 'package:daloouser/src/pages/productosServices/InformationServicePage.dar
 import 'package:daloouser/src/pages/productosServices/ListaProductosPage.dart';
 import 'package:daloouser/src/pages/productosServices/ProductosServicesTopInfo.dart';
 import 'package:daloouser/src/widget/buttons/TipePriceCardInactive.dart';
+import 'package:daloouser/src/widget/card/CardCarritoItem.dart';
 import 'package:daloouser/src/widget/card/CardCategorias.dart';
 import 'package:daloouser/src/widget/card/CardIconItem.dart';
 import 'package:daloouser/src/widget/card/SearchCardItem.dart';
@@ -38,51 +39,11 @@ class _HistorialPageState extends State<HistorialPage> {
     var texto =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
     return Scaffold(
-      body: DefaultTabController(
-        length: 3,
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                  shadowColor: primaryColor,
-                  expandedHeight: 200.0,
-                  backgroundColor: primaryColor,
-                  floating: false,
-                  pinned: false,
-                  flexibleSpace: ViewModelBuilder<ProductsViewModel>.reactive(
-                    viewModelBuilder: () => ProductsViewModel(),
-                    onModelReady: (model) => model.getServiceInfoById(widget.id),
-                    builder: (context, model, child) => model.busy
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : _servicesHome(model.infoService),
-                  )),
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                  TabBar(
-                    labelColor: Colors.black87,
-                    indicatorColor: primaryColor,
-                    unselectedLabelColor: Colors.grey,
-                    tabs: [
-                      Tab(text: "Productos"),
-                      Tab(text: "Comentarios"),
-                      Tab(text: "Informacion"),
-                    ],
-                    onTap: (index) {
-                      setState(() {
-                        print("historial page $index");
-                        pageActual = pages[index];
-                      });
-                    },
-                  ),
-                ),
-                pinned: false,
-              ),
-            ];
-          },
-          body: TabBarView(children: pages),
-        ),
+      body: Column(
+        children: [
+         // CardCarritoItem(),
+          //CardCarritoItem()
+        ],
       ),
     );
   }

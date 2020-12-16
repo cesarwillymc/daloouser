@@ -1,9 +1,11 @@
 import 'dart:ffi';
 
+import 'package:daloouser/data/model/CarritoPriceModel.dart';
 import 'package:daloouser/data/model/CategoriasModel.dart';
 import 'package:daloouser/data/model/CategoryModel.dart';
 import 'package:daloouser/data/model/ComentariosModel.dart';
 import 'package:daloouser/data/model/ComentariosStartModel.dart';
+import 'package:daloouser/data/model/DataServiceCarritoModel.dart';
 import 'package:daloouser/data/model/ListServices.dart';
 import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
@@ -18,8 +20,10 @@ import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../Locator.dart';
+import '../main.dart';
 import 'BaseModel.dart';
 
 class ProductsViewModel extends BaseModel {
@@ -87,11 +91,11 @@ class ProductsViewModel extends BaseModel {
       print("Categorias $updatedCategory");
       if (cat != null) {
         _categorias = updatedCategory;
-        _categorias.insert(0, CategoryModel("Todo", "",1));
+        _categorias.insert(0, CategoryModel("Todo", "", 1));
         notifyListeners();
         setBusy(false);
       } else {
-        _categorias = [CategoryModel("Todo", "",1)];
+        _categorias = [CategoryModel("Todo", "", 1)];
       }
     });
   }
@@ -114,6 +118,7 @@ class ProductsViewModel extends BaseModel {
       }
     });
   }
+
   ServiceModel _infoService;
 
   ServiceModel get infoService => _infoService;
@@ -142,7 +147,8 @@ class ProductsViewModel extends BaseModel {
     _mainRepository.getProductByID(id).then((cat) {
       ProductoData updatedCategory = cat;
       if (cat != null) {
-        var price=Prices(id,cat.priceGeneral,cat.namePriceGeneral,cat.description,"");
+        var price = Prices(
+            id, cat.priceGeneral, cat.namePriceGeneral, cat.description, "");
         updatedCategory.prices.add(price);
         _productData = updatedCategory;
         notifyListeners();
@@ -152,34 +158,37 @@ class ProductsViewModel extends BaseModel {
       }
     });
   }
-  int totalPaginas=0;
+
+  int totalPaginas = 0;
   int totalNetwoksItem;
   String categoriaId;
-  Future<List<ServiceModel>> getServicesByCategory(int offset) async{
-   //setBusy(true);
-    var valueBoolean =false;
+
+  Future<List<ServiceModel>> getServicesByCategory(int offset) async {
+    //setBusy(true);
+    var valueBoolean = false;
     ListServices lista;
-    if(totalNetwoksItem==null){
-      valueBoolean=true;
-    }else{
+    if (totalNetwoksItem == null) {
+      valueBoolean = true;
+    } else {
       print("getServicesByCategory off $totalNetwoksItem  $totalPaginas");
-      if(totalNetwoksItem/10>0){
-        if((totalNetwoksItem - (totalPaginas + 10)) > 1){
-          totalPaginas+=10;
-          valueBoolean=true;
+      if (totalNetwoksItem / 10 > 0) {
+        if ((totalNetwoksItem - (totalPaginas + 10)) > 1) {
+          totalPaginas += 10;
+          valueBoolean = true;
         }
       }
     }
 
-
-    if(valueBoolean){
-      _mainRepository.getServicesByCategory(categoriaId,totalPaginas).listen((cat) {
-        lista=cat;
-        totalNetwoksItem=lista.total;
+    if (valueBoolean) {
+      _mainRepository
+          .getServicesByCategory(categoriaId, totalPaginas)
+          .listen((cat) {
+        lista = cat;
+        totalNetwoksItem = lista.total;
         if (cat != null) {
-          if(lista.total/10>0){
-            if((lista.total - (totalPaginas + 10)) > 1){
-              totalPaginas+=10;
+          if (lista.total / 10 > 0) {
+            if ((lista.total - (totalPaginas + 10)) > 1) {
+              totalPaginas += 10;
             }
           }
           print("getServicesByCategory datos ${cat.total}");
@@ -190,26 +199,27 @@ class ProductsViewModel extends BaseModel {
       await Future.delayed(
         Duration(milliseconds: 1000),
       );
-      if(lista.data!=null){
-        return  lista.data;
-      }else{
+      if (lista.data != null) {
+        return lista.data;
+      } else {
         return [];
       }
-    }else{
+    } else {
       return [];
     }
   }
+
   List<CategoriasModel> _subcategoria;
 
-  List<CategoriasModel>  get subcategoria => _subcategoria;
+  List<CategoriasModel> get subcategoria => _subcategoria;
 
   void getSubCategoriaSpinner(String id) {
     setBusy(true);
     _mainRepository.getSubCategoriaSpinner(id).then((cat) {
       List<CategoriasModel> updatedCategory = cat;
       if (cat != null) {
-        var price=CategoriasModel("Buscar todos","");
-        updatedCategory.insert(0,price);
+        var price = CategoriasModel("Buscar todos", "");
+        updatedCategory.insert(0, price);
         _subcategoria = updatedCategory;
         notifyListeners();
         setBusy(false);
@@ -218,9 +228,10 @@ class ProductsViewModel extends BaseModel {
       }
     });
   }
+
   List<ComentariosModel> _comentariosList;
 
-  List<ComentariosModel>  get comentariosList => _comentariosList;
+  List<ComentariosModel> get comentariosList => _comentariosList;
 
   void getComentariosServices(String id) {
     setBusy(true);
@@ -237,87 +248,181 @@ class ProductsViewModel extends BaseModel {
       }
     });
   }
+
   List<ComentariosStartModel> _comentariosStartList;
 
-  List<ComentariosStartModel>  get comentariosStartList => _comentariosStartList;
+  List<ComentariosStartModel> get comentariosStartList => _comentariosStartList;
+
   void getComentariosStartServices(String id) {
     setBusy(true);
     _mainRepository.getComentariosStartServices(id).then((cat) {
       if (cat != null) {
-        _comentariosStartList= cat;
+        _comentariosStartList = cat;
         setBusy(false);
         notifyListeners();
       } else {
-        _comentariosStartList= [];
+        _comentariosStartList = [];
         setBusy(false);
         notifyListeners();
       }
     });
   }
 
-  int totalPaginasProducts=0;
+  int totalPaginasProducts = 0;
   int totalNetwoksItemProducts;
 
   List<ListaProductItem> _productosCategoria;
 
-  List<ListaProductItem>  get productosCategoria => _productosCategoria;
+  List<ListaProductItem> get productosCategoria => _productosCategoria;
 
-  Future<List<ListaProductItem>>  getProductsByCategoryData(int a)async{
+  Future<List<ListaProductItem>> getProductsByCategoryData(int a) async {
     return productosCategoria;
   }
+
   String spinnerData;
-  Future<List<ListaProductItem>> getProductsByCategory(int index) async{
+
+  Future<List<ListaProductItem>> getProductsByCategory(int index) async {
     setBusy(true);
-    var valueBoolean =false;
+    var valueBoolean = false;
     List<ListaProductItem> lista;
-    if(totalNetwoksItemProducts==null){
-      valueBoolean=true;
-    }else{
-      print("getProductsByCategory off $totalNetwoksItemProducts  $totalPaginasProducts");
-      if(totalNetwoksItemProducts/10>0){
-        if((totalNetwoksItemProducts - (totalPaginasProducts + 10)) > 1){
-          totalPaginasProducts+=10;
-          valueBoolean=true;
+    if (totalNetwoksItemProducts == null) {
+      valueBoolean = true;
+    } else {
+      print(
+          "getProductsByCategory off $totalNetwoksItemProducts  $totalPaginasProducts");
+      if (totalNetwoksItemProducts / 10 > 0) {
+        if ((totalNetwoksItemProducts - (totalPaginasProducts + 10)) > 1) {
+          totalPaginasProducts += 10;
+          valueBoolean = true;
         }
       }
     }
 
-
-    if(valueBoolean){
-      _mainRepository.getProductsByCategoria(spinnerData,totalPaginasProducts,categoriaId).then((cat) {
-        lista=cat;
-        totalNetwoksItemProducts=lista[0].total;
+    if (valueBoolean) {
+      _mainRepository
+          .getProductsByCategoria(
+              spinnerData, totalPaginasProducts, categoriaId)
+          .then((cat) {
+        lista = cat;
+        totalNetwoksItemProducts = lista[0].total;
         if (cat != null) {
-          if(lista[0].total/10>0){
-            if((lista[0].total - (totalPaginasProducts + 10)) > 1){
-              totalPaginasProducts+=10;
+          if (lista[0].total / 10 > 0) {
+            if ((lista[0].total - (totalPaginasProducts + 10)) > 1) {
+              totalPaginasProducts += 10;
             }
           }
           print("getServicesByCategory datos ${cat[0].total}");
-
         }
       });
       await Future.delayed(
         Duration(milliseconds: 500),
       );
-      if(lista==null){
+      if (lista == null) {
         await Future.delayed(
           Duration(milliseconds: 1200),
         );
       }
-      if(lista!=null){
+      if (lista != null) {
         print("getServicesByCategory Entro lista no null");
-        _productosCategoria=  lista;
+        _productosCategoria = lista;
         notifyListeners();
         setBusy(false);
-        return  _productosCategoria;
+        return _productosCategoria;
       }
-    }else{
+    } else {
       print("getServicesByCategory valueBolean false");
-      _productosCategoria= [];
+      _productosCategoria = [];
       notifyListeners();
       setBusy(false);
-      return  [];
+      return [];
     }
+  }
+
+  bool _permissionGranted;
+
+  bool get permissionGranted => _permissionGranted;
+
+  void PermissionMaps() async {
+    setBusy(true);
+    var status = await Permission.location.status;
+    switch (status) {
+      case PermissionStatus.granted:
+        _permissionGranted = true;
+        setBusy(false);
+        notifyListeners();
+        break;
+      case PermissionStatus.denied:
+        print("Permisssion  denied");
+        var permiso = await Permission.location.request();
+        if (permiso.isGranted) {
+          print("Permisssion  undetermined acept");
+          _permissionGranted = true;
+          setBusy(false);
+          notifyListeners();
+        } else {
+          print("Permisssion  undetermined no acept");
+          _permissionGranted = false;
+          setBusy(false);
+          notifyListeners();
+        }
+
+        break;
+      case PermissionStatus.restricted:
+        print("Permisssion  restricted");
+        _permissionGranted = false;
+        setBusy(false);
+        notifyListeners();
+        break;
+      case PermissionStatus.undetermined:
+        var permiso = await Permission.location.request();
+        if (permiso.isGranted) {
+          print("Permisssion  undetermined acept");
+          _permissionGranted = true;
+          setBusy(false);
+          notifyListeners();
+        } else {
+          print("Permisssion  undetermined no acept");
+          _permissionGranted = false;
+          setBusy(false);
+          notifyListeners();
+        }
+        break;
+      case PermissionStatus.permanentlyDenied:
+        print("Permisssion  permanentlyDenied");
+        openAppSettings();
+        _permissionGranted = false;
+        setBusy(false);
+        notifyListeners();
+        break;
+      default:
+        print("Permisssion  defaul");
+        _permissionGranted = false;
+        setBusy(false);
+        notifyListeners();
+        break;
+    }
+  }
+  //Get Price
+  double _timeandDistance;
+
+  double get timeandDistance => _timeandDistance;
+
+  void obtenerNuevoPrecio(String acces) async {
+    setBusy(true);
+    var size=Hive.box<DataServiceCarritoModel>(dataServiceBOXHIVE).length;
+    _mainRepository.getRutasGoogle(acces).then((cat) {
+      if (cat != null) {
+        var precio=fuctionPrice(cat[1],cat[0],size);
+        _timeandDistance = precio;
+        boxList[0].add(CarritoPriceModel(precio, acces));
+        setBusy(false);
+        notifyListeners();
+      }
+
+    });
+  }
+  void insertarPrecio(double precio){
+    _timeandDistance=precio;
+    notifyListeners();
   }
 }

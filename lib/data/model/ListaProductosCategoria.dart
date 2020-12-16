@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 
 import 'ProductoData.dart';
-import 'ServiceItem.dart';
 import 'ServiceModel.dart';
 
 part 'ListaProductosCategoria.g.dart';
-@HiveType()
+@HiveType(typeId: 2)
 class ListaProductosCategoria {
   @HiveField(0)
   ServiceModel service;

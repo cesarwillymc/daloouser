@@ -18,11 +18,12 @@ class PreviewServicePage extends StatefulWidget{
 }
 
 class _PreviewServicePageState extends State<PreviewServicePage> {
-
+  ServiceModel modelo;
   List<Widget> pages;
   @override
   Widget build(BuildContext context) {
-    pages= [ListaProductosPage(widget.categoria,widget.id),ComentariosPage(widget.id),InformationServicePage()];
+
+    pages= [ListaProductosPage(widget.categoria,widget.id),ComentariosPage(widget.id),InformationServicePage(model: modelo,)];
     return SafeArea(
       child: Scaffold(
         body: DefaultTabController(
@@ -74,6 +75,7 @@ class _PreviewServicePageState extends State<PreviewServicePage> {
   }
   Widget _servicesHome(ServiceModel infoService){
     pages[2]= InformationServicePage(model: infoService,);
+    modelo=infoService;
     return FlexibleSpaceBar(
         centerTitle: true,
         background: ProductosServicesTopInfo(infoService));

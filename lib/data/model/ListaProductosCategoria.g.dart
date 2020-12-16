@@ -9,10 +9,13 @@ part of 'ListaProductosCategoria.dart';
 class ListaProductosCategoriaAdapter
     extends TypeAdapter<ListaProductosCategoria> {
   @override
+  final int typeId = 2;
+
+  @override
   ListaProductosCategoria read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ListaProductosCategoria(
       fields[0] as ServiceModel,
@@ -29,5 +32,14 @@ class ListaProductosCategoriaAdapter
       ..writeByte(1)
       ..write(obj.items);
   }
-  int get typeId => 1;
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ListaProductosCategoriaAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

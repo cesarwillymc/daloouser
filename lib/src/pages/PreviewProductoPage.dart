@@ -1,5 +1,12 @@
 import 'dart:ui';
 
+import 'package:daloouser/data/model/CarritoModel.dart';
+import 'package:daloouser/data/model/CarritoPriceModel.dart';
+import 'package:daloouser/data/model/DataServiceCarritoModel.dart';
+import 'package:daloouser/data/model/Prices.dart';
+import 'package:daloouser/data/model/ProductoData.dart';
+import 'package:daloouser/data/network/NavigationService.dart';
+import 'package:daloouser/src/pages/CarritoPage.dart';
 import 'package:daloouser/src/widget/appbars/AppBarMain.dart';
 import 'package:daloouser/src/widget/buttons/TipePriceCardInactive.dart';
 import 'package:daloouser/src/widget/card/CardIconItem.dart';
@@ -9,7 +16,11 @@ import 'package:daloouser/utils/FunctionsUitls.dart';
 import 'package:daloouser/viewModel/ProductsViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../Locator.dart';
+import '../../main.dart';
 
 class PreviewProductoPage extends StatefulWidget {
   final String idProduct;
@@ -22,9 +33,13 @@ class PreviewProductoPage extends StatefulWidget {
 
 class _PreviewProductoPageState extends State<PreviewProductoPage> {
   var indexItem = 0;
-
+  var carritoBox=boxList[2];
+  var dataService=boxList[4];
+  Prices actualPrecio;
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
+
     //var texto =
     //  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
     return SafeArea(
@@ -229,6 +244,8 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
                                             onTap: () {
                                               setState(() {
                                                 indexItem = index;
+                                                actualPrecio= model.productData
+                                                    .prices[index];
                                               });
                                             },
                                             child: TipePriceCardInactive(
@@ -245,7 +262,30 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            _settingModalBottonSheep(context);
+                            if(actualPrecio==null){
+                              actualPrecio=model.productData
+                                  .prices[0];
+                            }
+                            if(dataService.isNotEmpty){
+                              List<DataServiceCarritoModel> respuesta=dataService.values.where((element) => (element).id==model.productData.serviceId).toList();
+                              print("RutasGoogle respuesta $respuesta ");
+                              if( respuesta.isEmpty){
+                                var modelo =DataServiceCarritoModel(model.productData.serviceId,model.productData.longitude,model.productData.latitude,model.productData.servicename);
+                                dataService.add(modelo);
+                                boxList[0].deleteAll(boxList[0].keys);
+                                _saveProductCar(model.productData);
+                              }else{
+                                print("RutasGoogle no esta vacio ");
+                                _saveProductCar(model.productData);
+                              }
+                            }else{
+                              var modelo =DataServiceCarritoModel(model.productData.serviceId,model.productData.longitude,model.productData.latitude,model.productData.servicename);
+                              dataService.add(modelo);
+                              boxList[0].deleteAll(boxList[0].keys);
+                              _saveProductCar(model.productData);
+                            }
+
+
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.8,
@@ -282,8 +322,28 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
                   ),
           )),
     );
-  }
 
+  }
+  void _saveProductCar(ProductoData model) {
+    CarritoModel elemento;
+    int llave;
+    carritoBox.toMap().forEach((key, value) {
+      if(widget.idProduct==value.id_Product&&  actualPrecio.id==value.id_Precio){
+        elemento=value;
+        llave=key;
+      }
+    });
+    //List<CarritoModel> producto=carritoBox.values.where((element) => widget.idProduct==element.id_Product&&  actualPrecio.id==element.id_Precio);
+    if(elemento==null){
+      elemento=CarritoModel(model.serviceId,widget.idProduct,actualPrecio.id,model.servicename,_increment,model.itemname,actualPrecio.name,model.img,actualPrecio.price*_increment,actualPrecio.price);
+      carritoBox.add(elemento);
+    }else{
+      elemento.cantidad +=_increment;
+      elemento.precioTotal=elemento.precioUnitari * elemento.cantidad;
+        carritoBox.put(llave, elemento);
+    }
+    _settingModalBottonSheep(context);
+  }
   int _increment = 1;
 
   void _settingModalBottonSheep(context) {
@@ -299,7 +359,7 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
             onTap: () {
               //  Navigator.of(context).pushReplacement(MaterialPageRoute(
               //                            builder: (BuildContext context) => OrderPage()));
-              // _navigationService.navigateTo(MainScreenViewRoute,arguments:OrderPage());
+               _navigationService.navigateTo(MainScreenViewRoute,arguments:CarritoPage());
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
@@ -316,5 +376,9 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
             ),
           );
         });
+
   }
+
 }
+
+

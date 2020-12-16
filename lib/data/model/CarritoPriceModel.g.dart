@@ -1,38 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'CategoryModel.dart';
+part of 'CarritoPriceModel.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
+class CarritoPriceModelAdapter extends TypeAdapter<CarritoPriceModel> {
   @override
-  final int typeId = 1;
+  final int typeId = 7;
 
   @override
-  CategoryModel read(BinaryReader reader) {
+  CarritoPriceModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CategoryModel(
-      fields[0] as String,
+    return CarritoPriceModel(
+      fields[0] as double,
       fields[1] as String,
-      fields[2] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CategoryModel obj) {
+  void write(BinaryWriter writer, CarritoPriceModel obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.img)
       ..writeByte(2)
-      ..write(obj.total);
+      ..writeByte(0)
+      ..write(obj.Precio)
+      ..writeByte(1)
+      ..write(obj.url);
   }
 
   @override
@@ -41,7 +38,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CategoryModelAdapter &&
+      other is CarritoPriceModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

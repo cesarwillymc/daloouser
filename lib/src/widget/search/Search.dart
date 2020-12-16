@@ -1,6 +1,7 @@
 import 'package:daloouser/Locator.dart';
 import 'package:daloouser/data/model/ServiceItem.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
+import 'package:daloouser/main.dart';
 import 'package:daloouser/src/widget/card/SearchCardItem.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:daloouser/viewModel/ProductsViewModel.dart';
@@ -69,7 +70,6 @@ class Search extends SearchDelegate {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  var box=Hive.box<ServiceItem>(recentSearchBOXHIVE);
                   var modelo=model.searchProducts[index];
                   _comprobarDatos(modelo);
                 },
@@ -79,7 +79,7 @@ class Search extends SearchDelegate {
     );
   }
   void _comprobarDatos(ServiceItem model)async{
-    var box=Hive.box<ServiceItem>(recentSearchBOXHIVE);
+    var box=boxList[1];
     print("aaaexiste key ${model.id}");
     bool encontrado=false;
     box.values.forEach((element) {
@@ -91,7 +91,7 @@ class Search extends SearchDelegate {
     if(!encontrado){
       print("no existe key ${encontrado}");
       if(box.length>10){
-        box.delete(0);
+        box.deleteAt(0);
       }
       model.idNumber=box.length;
       box.add(model);

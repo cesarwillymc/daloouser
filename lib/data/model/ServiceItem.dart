@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'ServiceItem.g.dart';
 
-@HiveType()
+@HiveType(typeId: 3)
 class ServiceItem {
   @HiveField(0)
   String category;

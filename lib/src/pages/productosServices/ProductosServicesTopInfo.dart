@@ -25,16 +25,17 @@ class ProductosServicesTopInfo extends StatelessWidget{
           children: [
             Container(
               height: 200,
-              decoration: new BoxDecoration(
-                gradient: new LinearGradient(
+              decoration:  BoxDecoration(
+                gradient:  LinearGradient(
                     colors: [
                       Colors.transparent,
                       Colors.black54,
                     ],
-                    begin: const FractionalOffset(0, 0),
-                    end: const FractionalOffset(0, 1),
                     stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp),
+                    tileMode: TileMode.clamp,
+                    begin: const FractionalOffset(0, 0),
+                    end: const FractionalOffset(0, 1),)
+
               ),
             ),
             Container(
