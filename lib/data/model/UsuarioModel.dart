@@ -50,9 +50,9 @@ class UsuarioModel {
     mobilePhone = json['mobilePhone'];
     name = json['name'];
     lastName = json['lastName'];
-    latitude = double.parse(json['latitude']);
-    longitude = double.parse(json['longitude']);
-    altitude = int.parse(json['altitude']);
+    latitude = double.parse(json['latitude'].toString());
+    longitude = double.parse(json['longitude'].toString());
+    altitude = int.parse(json['altitude'].toString());
     address = json['address'];
     idUser = json['idUser'];
   }

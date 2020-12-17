@@ -1,0 +1,217 @@
+{
+  "project_info": {
+    "project_number": "197162189730",
+    "firebase_url": "https://daloodelivery-31d7c.firebaseio.com",
+    "project_id": "daloodelivery-31d7c",
+    "storage_bucket": "daloodelivery-31d7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197162189730:android:3e0fa9f848bb81139928fb",
+        "android_client_info": {
+          "package_name": "com.cesarwillymc.daloouser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197162189730-qcqccnvq9kse30aqn47ob36v46bbl97u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cesarwillymc.daloouser",
+            "certificate_hash": "ad9dfa9e45f8bad0d554b06be3408434f47f555b"
+          }
+        },
+        {
+          "client_id": "197162189730-89f6pah0h6944vvkl9lf4bnlcnq43dm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFF-jLKwnQH9kTr3znCcryZbJRipuTKpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197162189730-5uu3t56ap1h1vu6cpgovl8kbdibtrus8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197162189730:android:7e9570e1b89e62539928fb",
+        "android_client_info": {
+          "package_name": "com.summit.admindalo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197162189730-89f6pah0h6944vvkl9lf4bnlcnq43dm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFF-jLKwnQH9kTr3znCcryZbJRipuTKpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197162189730-5uu3t56ap1h1vu6cpgovl8kbdibtrus8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197162189730:android:1f849d2c86ee2e389928fb",
+        "android_client_info": {
+          "package_name": "com.summit.composetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197162189730-89f6pah0h6944vvkl9lf4bnlcnq43dm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFF-jLKwnQH9kTr3znCcryZbJRipuTKpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197162189730-5uu3t56ap1h1vu6cpgovl8kbdibtrus8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197162189730:android:8517a7ed71879dd79928fb",
+        "android_client_info": {
+          "package_name": "com.thesummitdev.daloo.rider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197162189730-sgbvuabdbcmtopimc7hm78gdgpqfdsgr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thesummitdev.daloo.rider",
+            "certificate_hash": "e038e3b6ff7ea0911efee868e2d7fb9bcc50693f"
+          }
+        },
+        {
+          "client_id": "197162189730-89f6pah0h6944vvkl9lf4bnlcnq43dm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFF-jLKwnQH9kTr3znCcryZbJRipuTKpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197162189730-5uu3t56ap1h1vu6cpgovl8kbdibtrus8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197162189730:android:54f9f9dff31f644d9928fb",
+        "android_client_info": {
+          "package_name": "com.thesummitdev.daloo.service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197162189730-b7f0h8uahjrdp659fipbm0o391qo41n6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thesummitdev.daloo.service",
+            "certificate_hash": "e038e3b6ff7ea0911efee868e2d7fb9bcc50693f"
+          }
+        },
+        {
+          "client_id": "197162189730-89f6pah0h6944vvkl9lf4bnlcnq43dm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFF-jLKwnQH9kTr3znCcryZbJRipuTKpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197162189730-5uu3t56ap1h1vu6cpgovl8kbdibtrus8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197162189730:android:afc3af7724d6ab3a9928fb",
+        "android_client_info": {
+          "package_name": "com.thesummitdev.daloo.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197162189730-usngo72lk9qmpr8smscqjb7c3pam6ihl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thesummitdev.daloo.user",
+            "certificate_hash": "e038e3b6ff7ea0911efee868e2d7fb9bcc50693f"
+          }
+        },
+        {
+          "client_id": "197162189730-89f6pah0h6944vvkl9lf4bnlcnq43dm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFF-jLKwnQH9kTr3znCcryZbJRipuTKpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197162189730-5uu3t56ap1h1vu6cpgovl8kbdibtrus8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

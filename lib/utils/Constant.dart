@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:daloouser/data/model/DataServiceCarritoModel.dart';
+import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
+import '../Locator.dart';
+import '../main.dart';
 import 'FunctionsUitls.dart';
 
 const String SignInViewRoute = "LoginView";
@@ -26,7 +29,11 @@ const String usuarioBOXHIVE = "usuarioBOXHIVE";
 const String carritoBOXHIVE = "carritoBOXHIVE";
 const String dataServiceBOXHIVE = "dataServiceBOXHIVE";
 const String priceCarritoBOXHIVE = "priceCarritoBOXHIVE";
+const String polylineBOXHIVE = "polylineBOXHIVE";
+//Shared Preferencs
 
+const String sharedPrefToken = "sharedPrefToken";
+const String sharedPrefIntro = "sharedPrefIntro";
 //Colors
 final Color primaryColor = Color(convertColorHex("#004E98"));
 
@@ -79,4 +86,16 @@ double fuctionPrice(int distance, int duration, int size) {
       (distance * 0.00055) +
       costo +
       ((size - 1) * 1.5));
+}
+enum ResourceState{
+  LOADING,
+  COMPLETE,
+  ERROR
+}
+
+bool comprobarLogin(){
+  if(boxList[3].isEmpty){
+    locator<NavigationService>().navigateTo(SignInViewRoute);
+  }
+  return true;
 }

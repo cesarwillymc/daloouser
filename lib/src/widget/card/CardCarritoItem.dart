@@ -27,23 +27,28 @@ class CardCarritoItem extends StatelessWidget {
           color: Colors.red,
           icon: Icons.delete_forever_sharp,
           onTap: () {
-            carritoBox.deleteFromDisk();
-            dataService.deleteFromDisk();
-            boxList[0].deleteAll(boxList[0].keys);
+            carritoBox.toMap().forEach((key, value) {
+              carritoBox.delete(key);
+            });
+            dataService.toMap().forEach((key, value) {
+              dataService.delete(key);
+            });
+            boxList[0].deleteAt(0);
           },
         ),
         IconSlideAction(
           caption: 'Este',
-          color: Colors.red,
+          color: primaryColor,
           icon: Icons.delete,
           onTap: () {
             carritoBox.deleteAt(index);
-            var datos=carritoBox.values.where((element) => element.idServicio==model.idServicio);
+            var datos=carritoBox.values.where((element) => element.idServicio==model.idServicio).toList();
             if(datos.isEmpty){
               dataService.toMap().forEach((key, value) {
+                boxList[0].deleteAt(0);
                 if(value.id==model.idServicio){
                   dataService.delete(key);
-                  boxList[0].deleteAll(boxList[0].keys);
+                  return;
                 }
               });
             }
@@ -125,7 +130,7 @@ class CardCarritoItem extends StatelessWidget {
                                     dataService.toMap().forEach((key, value) {
                                       if(value.id==model.idServicio){
                                         dataService.delete(key);
-                                        boxList[0].deleteAll(boxList[0].keys);
+                                        boxList[0].deleteAt(0);
                                       }
                                     });
                                   }

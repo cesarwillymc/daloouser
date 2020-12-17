@@ -1,3 +1,4 @@
+import 'package:daloouser/src/pages/LoginAuthPage.dart';
 import 'package:daloouser/src/pages/PreviewCategoriasPage.dart';
 import 'package:daloouser/src/pages/PreviewProductoPage.dart';
 import 'package:daloouser/src/pages/PreviewServicePage.dart';
@@ -34,6 +35,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: PreviewCategoriasPage((settings.arguments as List<String>)[0],
             (settings.arguments as List<String>)[1],(settings.arguments as List<String>)[2]),
+      );
+    case SignInViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: LoginAuthPage(),
       );
     default:
       return MaterialPageRoute(

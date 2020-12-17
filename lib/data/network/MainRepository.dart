@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:daloouser/data/model/CategoriasModel.dart';
 import 'package:daloouser/data/model/CategoryModel.dart';
@@ -7,13 +8,18 @@ import 'package:daloouser/data/model/ComentariosStartModel.dart';
 import 'package:daloouser/data/model/ListServices.dart';
 import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
+import 'package:daloouser/data/model/MapeoDepartamento.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
 import 'package:daloouser/data/model/PromocionesModel.dart';
 import 'package:daloouser/data/model/ServiceItem.dart';
 import 'package:daloouser/data/model/ServiceModel.dart';
+import 'package:daloouser/data/model/UsuarioModel.dart';
 import 'package:daloouser/utils/Constant.dart';
+import 'package:daloouser/utils/FunctionsUitls.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainRepository{
   Future<List<ServiceItem>> searchProducts(String palabra) async {
@@ -186,6 +192,61 @@ class MainRepository{
         distance+=int.parse(element["distance"]["value"].toString());
       });
       return [time,distance];
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+  //Get New Price
+  Future<bool> loginWithFacebookorGmail(String access,bool isFacebook) async {
+    String url;
+    if(isFacebook){
+      url="login/facebook";
+    }else{
+      url="login/google";
+    }
+    var palabraUrl=BASE_URL_API+url;
+    var cuerpo=loginFacebookJson(access,"");
+
+    final response =await http.post(palabraUrl,body: cuerpo);
+    if(response.statusCode==200){
+      print("RutasGoogle cuerpo $cuerpo $palabraUrl acces token signin ${response.headers["authtoken"]}");
+      if(response.headers["authtoken"]!=null){
+        var shared= await SharedPreferences.getInstance();
+        shared.setString(sharedPrefToken, response.headers["authtoken"].toString());
+        return true;
+      }
+      return false;
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+  Future<UsuarioModel> getInformationUser() async {
+    final String url="customer/information";
+
+    var palabraUrl=BASE_URL_API+url;
+
+
+    var shared= await SharedPreferences.getInstance();
+    var token =shared.getString(sharedPrefToken);
+
+    final response =await http.get(palabraUrl,headers: {HttpHeaders.authorizationHeader:token});
+    if(response.statusCode==200){
+      print("RutasGoogle $palabraUrl  $token");
+      return UsuarioModel.fromJson(jsonDecode(response.body));
+    }else{
+      throw Exception("Error en la red");
+    }
+  }
+  Future<MapeoDepartamento> getPoliline() async {
+    final String url="user/maps";
+
+    var palabraUrl=BASE_URL_API+url;
+
+    final response =await http.get(palabraUrl);
+    if(response.statusCode==200){
+      var datos=MapeoDepartamento.fromJson(jsonDecode(response.body)[0]);
+
+      return datos;
     }else{
       throw Exception("Error en la red");
     }

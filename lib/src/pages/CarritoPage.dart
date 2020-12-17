@@ -62,13 +62,14 @@ class _CarritoPageState extends State<CarritoPage> {
                   var carrito= boxList[0];
                   print("RutasGoogle tamaño box data ${boxdata.length} ${carrito.isEmpty} ${boxList[4].isNotEmpty} ${usuario.isNotEmpty} ");
                   if(carrito.isEmpty){
-                    if(boxList[4].isNotEmpty && usuario.isEmpty){
+                    if(boxList[4].isNotEmpty && usuario.isNotEmpty){
                       DataServiceCarritoModel inicio=boxdata.getAt(0);
-                      LatLng usuario=LatLng(-15.822938, -70.014297);
-                      var acceso= getDirectionUrl(LatLng(inicio.latitude, inicio.longitude), usuario);
+                      LatLng usuarioLatLong=LatLng((usuario.getAt(0) as UsuarioModel).latitude, (usuario.getAt(0) as UsuarioModel).longitude);
+                      var acceso= getDirectionUrl(LatLng(inicio.latitude, inicio.longitude), usuarioLatLong);
                       var urlDefinitiva= puntosList(acceso);
                       model.obtenerNuevoPrecio(urlDefinitiva);
                     }
+                    model.insertarPrecio(0.0);
                   }else{
                     model.insertarPrecio(carrito.getAt(0).Precio);
                   }
@@ -83,7 +84,7 @@ class _CarritoPageState extends State<CarritoPage> {
                       _buildtextCardContainer("Sub Total","S/. ${subtotal.toStringAsFixed(2)}"),
                       Divider(height: 20,color: Colors.blueGrey,),
                       SizedBox(height: 5,),
-                      _buildtextCardContainer("Delivery",boxdata.isEmpty?"Sin productos":usuario.isNotEmpty?"Sin usuario":model.busy?"Cargando..":"S/. ${model.timeandDistance.toStringAsFixed(2)}"),
+                      _buildtextCardContainer("Delivery",boxdata.isEmpty?"Sin productos":usuario.isEmpty?"Sin usuario":model.busy?"Cargando..":"S/. ${model.timeandDistance.toStringAsFixed(2)}"),
                       SizedBox(height: 5,),
                       Divider(height: 20,color: Colors.blueGrey,),
                       _buildtextCardContainer("TOTAL",model.timeandDistance==null?"S/. $subtotal":"S/. ${(subtotal+model.timeandDistance).toStringAsFixed(2)}",isBol: true),
@@ -104,23 +105,24 @@ class _CarritoPageState extends State<CarritoPage> {
                                 Row(
                                   children: [
                                     Icon(Icons.location_on,color: primaryColor,),
-                                    Flexible(child: Container(child: AutoSizeText("Jiron Selva Alegre con luis rivarola miranda",overflow: TextOverflow.ellipsis,)))
+                                    Flexible(child: Container(child: AutoSizeText(boxList[3].isEmpty?"Sin Usuario": (boxList[3].getAt(0) as UsuarioModel).address,overflow: TextOverflow.ellipsis,)))
                                   ],
                                 )
                               ],
                             ),
                           ),
-                          TipePriceCardInactive("ACTUALIZAR",false)
+                          GestureDetector(child: TipePriceCardInactive("ACTUALIZAR",false),onTap: (){
+                            if(comprobarLogin()){
+
+                            }
+                          },)
                         ],
                       ),
                       GestureDetector(
                         onTap: () {
-                          /* if(user){
-                          Toast.show("Logeado", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-                        }else{
-                          Toast.show("sin logeo", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-                          _navigationService.navigateTo(LoginViewRoute);
-                        }*/
+                          if(comprobarLogin()){
+
+                          }
                         },
                         child: Center(
                           child: Container(

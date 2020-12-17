@@ -51,6 +51,12 @@ dependencies:
   permission_handler: ^5.0.1+1
   flutter_slidable:
   intl: ^0.16.1
+  firebase_core: ^0.5.3
+  introduction_screen: ^1.0.7
+  cloud_firestore: ^0.14.4
+  facebook_sdk: ^0.0.7
+  google_sign_in: ^4.5.6
+  shared_preferences: ^0.5.12+4
 dev_dependencies:
   flutter_test:
     sdk: flutter

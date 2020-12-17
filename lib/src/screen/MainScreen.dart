@@ -10,6 +10,7 @@ import 'package:daloouser/utils/FunctionsUitls.dart';
 import 'package:flutter/material.dart';
 
 import '../../Locator.dart';
+import '../../main.dart';
 
 class MainScreen extends StatefulWidget {
   Widget current;
@@ -61,63 +62,64 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     bool _searching = false;
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (int index) {
-          setState(() {
-            currentTabIndex = index;
-            currentPage = pages[index];
-            titulo = titles[index];
-            //   _navigationService.navigateTo(currentPage);
-          });
-        },
-        currentIndex: currentTabIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
-        items: [
-          BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/shop.png",
-                width: currentTabIndex == 0 ? 25 : 20,
-                height: currentTabIndex == 0 ? 25 : 20,
-                color: currentTabIndex == 0 ? primaryColor : Colors.grey,
-              ),
-              title: Text("Tiendas")),
-          BottomNavigationBarItem(
-              icon: Image.asset("assets/history.png",
-                  width: currentTabIndex == 1 ? 25 : 20,
-                  height: currentTabIndex == 1 ? 25 : 20,
-                  color: currentTabIndex == 1 ? primaryColor : Colors.grey),
-              title: Text("Historial")),
-          BottomNavigationBarItem(
-              icon: Image.asset("assets/pedidoon.png",
-                  width: currentTabIndex == 2 ? 25 : 20,
-                  height: currentTabIndex == 2 ? 25 : 20,
-                  color: currentTabIndex == 2 ? primaryColor : Colors.grey),
-              title: Text("Mi Pedido")),
-          BottomNavigationBarItem(
-              icon: Image.asset("assets/chat.png",
-                  width: currentTabIndex == 3 ? 25 : 20,
-                  height: currentTabIndex == 3 ? 25 : 20,
-                  color: currentTabIndex == 3 ? primaryColor : Colors.grey),
-              title: Text("TeloTraigo")),
-        ],
-      ),
-      appBar: AppBarMain(
-        searchpressed: (){
-          setState(() {
-            showSearch(context: context, delegate: Search());
-          });
-        },
-        isVisibleLocation: widget.isLocationVisible,
-        titulo: titulo,
-      ),
-      resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.white,
-      body: currentPage,
-    );
+            bottomNavigationBar: BottomNavigationBar(
+              onTap: (int index) {
+                setState(() {
+                  currentTabIndex = index;
+                  currentPage = pages[index];
+                  titulo = titles[index];
+                  //   _navigationService.navigateTo(currentPage);
+                });
+              },
+              currentIndex: currentTabIndex,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: primaryColor,
+              unselectedItemColor: Colors.grey,
+              selectedFontSize: 12,
+              unselectedFontSize: 10,
+              items: [
+                BottomNavigationBarItem(
+                    icon: Image.asset(
+                      "assets/shop.png",
+                      width: currentTabIndex == 0 ? 25 : 20,
+                      height: currentTabIndex == 0 ? 25 : 20,
+                      color: currentTabIndex == 0 ? primaryColor : Colors.grey,
+                    ),
+                    title: Text("Tiendas")),
+                BottomNavigationBarItem(
+                    icon: Image.asset("assets/history.png",
+                        width: currentTabIndex == 1 ? 25 : 20,
+                        height: currentTabIndex == 1 ? 25 : 20,
+                        color: currentTabIndex == 1 ? primaryColor : Colors.grey),
+                    title: Text("Historial")),
+                BottomNavigationBarItem(
+                    icon: Image.asset("assets/pedidoon.png",
+                        width: currentTabIndex == 2 ? 25 : 20,
+                        height: currentTabIndex == 2 ? 25 : 20,
+                        color: currentTabIndex == 2 ? primaryColor : Colors.grey),
+                    title: Text("Mi Pedido")),
+                BottomNavigationBarItem(
+                    icon: Image.asset("assets/chat.png",
+                        width: currentTabIndex == 3 ? 25 : 20,
+                        height: currentTabIndex == 3 ? 25 : 20,
+                        color: currentTabIndex == 3 ? primaryColor : Colors.grey),
+                    title: Text("TeloTraigo")),
+              ],
+            ),
+            appBar: AppBarMain(
+              searchpressed: (){
+                setState(() {
+                  showSearch(context: context, delegate: Search());
+                });
+              },
+              isVisibleLocation: widget.isLocationVisible,
+              titulo: titulo,
+            ),
+            resizeToAvoidBottomPadding: false,
+            backgroundColor: Colors.white,
+            body: currentPage,
+          );
+
   }
 
   Widget _buildShoppingCart() {

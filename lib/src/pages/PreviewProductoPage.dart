@@ -53,6 +53,7 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
             },
             isVisibleLocation: true,
             titulo: "Producto",
+
           ),
           body: ViewModelBuilder<ProductsViewModel>.reactive(
             viewModelBuilder: () => ProductsViewModel(),
@@ -263,25 +264,30 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
                         GestureDetector(
                           onTap: () {
                             if(actualPrecio==null){
+                              print("previewProduct actual Precio Vacio");
                               actualPrecio=model.productData
                                   .prices[0];
                             }
+                            _settingModalBottonSheep(context);
                             if(dataService.isNotEmpty){
                               List<DataServiceCarritoModel> respuesta=dataService.values.where((element) => (element).id==model.productData.serviceId).toList();
-                              print("RutasGoogle respuesta $respuesta ");
+                              print("previewProduct respuesta $respuesta ");
                               if( respuesta.isEmpty){
                                 var modelo =DataServiceCarritoModel(model.productData.serviceId,model.productData.longitude,model.productData.latitude,model.productData.servicename);
                                 dataService.add(modelo);
-                                boxList[0].deleteAll(boxList[0].keys);
+                                boxList[0].deleteAt(0);
                                 _saveProductCar(model.productData);
                               }else{
-                                print("RutasGoogle no esta vacio ");
+                                print("previewProduct no esta vacio ");
                                 _saveProductCar(model.productData);
                               }
                             }else{
+                              print("previewProduct data servie no esta vacio ");
                               var modelo =DataServiceCarritoModel(model.productData.serviceId,model.productData.longitude,model.productData.latitude,model.productData.servicename);
                               dataService.add(modelo);
-                              boxList[0].deleteAll(boxList[0].keys);
+                              try{
+                                boxList[0].deleteAt(0);
+                              }catch(e){}
                               _saveProductCar(model.productData);
                             }
 
@@ -325,6 +331,7 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
 
   }
   void _saveProductCar(ProductoData model) {
+    print("previewProduct data servie no esta vacio entro save product ");
     CarritoModel elemento;
     int llave;
     carritoBox.toMap().forEach((key, value) {
@@ -342,7 +349,7 @@ class _PreviewProductoPageState extends State<PreviewProductoPage> {
       elemento.precioTotal=elemento.precioUnitari * elemento.cantidad;
         carritoBox.put(llave, elemento);
     }
-    _settingModalBottonSheep(context);
+
   }
   int _increment = 1;
 

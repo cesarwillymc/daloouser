@@ -9,6 +9,7 @@ import 'package:daloouser/data/model/DataServiceCarritoModel.dart';
 import 'package:daloouser/data/model/ListServices.dart';
 import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
+import 'package:daloouser/data/model/MapeoDepartamento.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
 import 'package:daloouser/data/model/PromocionesModel.dart';
@@ -18,6 +19,7 @@ import 'package:daloouser/data/network/DialogService.dart';
 import 'package:daloouser/data/network/MainRepository.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:daloouser/utils/Constant.dart';
+import 'package:daloouser/utils/Resource.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -149,7 +151,8 @@ class ProductsViewModel extends BaseModel {
       if (cat != null) {
         var price = Prices(
             id, cat.priceGeneral, cat.namePriceGeneral, cat.description, "");
-        updatedCategory.prices.add(price);
+
+        updatedCategory.prices.insert(0, price);
         _productData = updatedCategory;
         notifyListeners();
         setBusy(false);
@@ -402,6 +405,7 @@ class ProductsViewModel extends BaseModel {
         break;
     }
   }
+
   //Get Price
   double _timeandDistance;
 
@@ -409,20 +413,60 @@ class ProductsViewModel extends BaseModel {
 
   void obtenerNuevoPrecio(String acces) async {
     setBusy(true);
-    var size=Hive.box<DataServiceCarritoModel>(dataServiceBOXHIVE).length;
+    var size = Hive.box<DataServiceCarritoModel>(dataServiceBOXHIVE).length;
     _mainRepository.getRutasGoogle(acces).then((cat) {
       if (cat != null) {
-        var precio=fuctionPrice(cat[1],cat[0],size);
+        var precio = fuctionPrice(cat[1], cat[0], size);
         _timeandDistance = precio;
         boxList[0].add(CarritoPriceModel(precio, acces));
         setBusy(false);
         notifyListeners();
       }
-
     });
   }
-  void insertarPrecio(double precio){
-    _timeandDistance=precio;
+
+  void insertarPrecio(double precio) {
+    _timeandDistance = precio;
     notifyListeners();
   }
+  Stream<Resource> loginWithFacebookorGmail(String acces,{bool isFacebook=true}) async*{
+    yield Resource.loading(0);
+    setBusy(true);
+    try{
+     await _mainRepository.loginWithFacebookorGmail(acces,isFacebook);
+     var usuario=await _mainRepository.getInformationUser();
+     if(usuario!=null){
+        if(usuario.validateNumber){
+          boxList[3].add(usuario);
+          yield Resource.complete(true);
+        }else{
+          yield Resource.complete(false);
+        }
+        setBusy(false);
+        notifyListeners();
+     }
+    }catch(e){
+      print(e);
+      yield Resource.error("Surgio un error");
+      setBusy(false);
+      notifyListeners();
+    }
+    
+  }
+
+  //Obtener Ruta
+   void getPoliline(){
+      _mainRepository.getPoliline().then((value) {
+        MapeoDepartamento mapa=value;
+        if(mapa!=null){
+          if(boxList[5].isEmpty){
+            boxList[5].add(mapa);
+          }
+
+         // var mapa=(boxList[5].getAt(0) as MapeoDepartamento).mapa;
+         // print("mapa ${mapa}");
+
+        }
+      });
+   }
 }

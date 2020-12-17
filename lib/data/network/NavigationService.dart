@@ -13,4 +13,8 @@ class NavigationService {
     return _navigationKey.currentState
         .pushNamed(routeName, arguments: arguments);
   }
+  Future<dynamic> navigateToClearStack(String routeName, {dynamic arguments}) {
+    return  _navigationKey.currentState.pushNamedAndRemoveUntil(routeName, (r) => false, arguments: arguments);
+
+  }
 }
