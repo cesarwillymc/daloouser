@@ -12,6 +12,7 @@ import 'package:daloouser/data/model/MapeoDepartamento.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
 import 'package:daloouser/data/model/PromocionesModel.dart';
+import 'package:daloouser/data/model/SendCarrito.dart';
 import 'package:daloouser/data/model/ServiceItem.dart';
 import 'package:daloouser/data/model/ServiceModel.dart';
 import 'package:daloouser/data/model/UsuarioModel.dart';
@@ -249,6 +250,44 @@ class MainRepository{
       return datos;
     }else{
       throw Exception("Error en la red");
+    }
+  }
+  Future<bool> updateDirecctionUrl(String direccion, String referencia,double latitude,double longitud) async {
+    final String url="customer/address";
+
+    var palabraUrl=BASE_URL_API+url;
+
+    var cuerpo=directionUserJson(direccion,referencia,latitude,longitud);
+    print(cuerpo);
+    var shared= await SharedPreferences.getInstance();
+    var token =shared.getString(sharedPrefToken);
+
+
+    final response =await http.put(palabraUrl,body: cuerpo,headers: {HttpHeaders.authorizationHeader:token} );
+    print(palabraUrl);
+    if(response.statusCode==200){
+      return true;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<bool> sendProductsCarrito(SendCarrito model) async {
+    final String url="customer/neworder";
+
+    var palabraUrl=BASE_URL_API+url;
+
+    var cuerpo=model.toJson();
+    print(cuerpo);
+    var shared= await SharedPreferences.getInstance();
+    var token =shared.getString(sharedPrefToken);
+
+
+    final response =await http.post(palabraUrl,body: cuerpo,headers: {HttpHeaders.authorizationHeader:token} );
+    print(palabraUrl);
+    if(response.statusCode==200){
+      return true;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
     }
   }
 

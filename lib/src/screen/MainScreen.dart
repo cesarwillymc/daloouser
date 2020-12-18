@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:daloouser/data/model/UsuarioModel.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:daloouser/src/pages/HistorialPage.dart';
 import 'package:daloouser/src/pages/MiPedidoPage.dart';
@@ -7,7 +9,9 @@ import 'package:daloouser/src/widget/appbars/AppBarMain.dart';
 import 'package:daloouser/src/widget/search/Search.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:daloouser/utils/FunctionsUitls.dart';
+import 'package:daloouser/viewModel/ProductsViewModel.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 
 import '../../Locator.dart';
 import '../../main.dart';
@@ -60,6 +64,24 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UsuarioModel usuario;
+    DocumentReference query;
+    if (boxList[3].isNotEmpty) {
+      usuario = boxList[3].getAt(0);
+      query = FirebaseFirestore.instance
+          .collection("SettingsAccount")
+          .doc("User")
+          .collection("Config")
+          .doc(usuario.idUser);
+    }
+    query.snapshots().listen((event) {
+        if(event.exists){
+          var stateOrder = event.get("stateorder") as bool;
+          if (stateOrder??false) {
+            shared.setBool(sharedPrefCARRITO_ID, stateOrder);
+          }
+        }
+    });
     bool _searching = false;
     return Scaffold(
             bottomNavigationBar: BottomNavigationBar(
@@ -90,24 +112,27 @@ class _MainScreenState extends State<MainScreen> {
                     icon: Image.asset("assets/history.png",
                         width: currentTabIndex == 1 ? 25 : 20,
                         height: currentTabIndex == 1 ? 25 : 20,
-                        color: currentTabIndex == 1 ? primaryColor : Colors.grey),
+                        color:
+                            currentTabIndex == 1 ? primaryColor : Colors.grey),
                     title: Text("Historial")),
                 BottomNavigationBarItem(
                     icon: Image.asset("assets/pedidoon.png",
                         width: currentTabIndex == 2 ? 25 : 20,
                         height: currentTabIndex == 2 ? 25 : 20,
-                        color: currentTabIndex == 2 ? primaryColor : Colors.grey),
+                        color:
+                            currentTabIndex == 2 ? primaryColor : Colors.grey),
                     title: Text("Mi Pedido")),
                 BottomNavigationBarItem(
                     icon: Image.asset("assets/chat.png",
                         width: currentTabIndex == 3 ? 25 : 20,
                         height: currentTabIndex == 3 ? 25 : 20,
-                        color: currentTabIndex == 3 ? primaryColor : Colors.grey),
+                        color:
+                            currentTabIndex == 3 ? primaryColor : Colors.grey),
                     title: Text("TeloTraigo")),
               ],
             ),
             appBar: AppBarMain(
-              searchpressed: (){
+              searchpressed: () {
                 setState(() {
                   showSearch(context: context, delegate: Search());
                 });

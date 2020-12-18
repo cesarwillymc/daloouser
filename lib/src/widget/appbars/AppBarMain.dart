@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:daloouser/data/model/UsuarioModel.dart';
+import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../../Locator.dart';
 import '../../../main.dart';
 
 class AppBarMain extends StatefulWidget implements PreferredSizeWidget {
@@ -22,6 +24,7 @@ class AppBarMain extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AppBarMainState extends State<AppBarMain> {
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return WatchBoxBuilder(
@@ -60,7 +63,7 @@ class _AppBarMainState extends State<AppBarMain> {
                 ? GestureDetector(
                     onTap: () {
                       if(comprobarLogin()){
-
+                        _navigationService.navigateTo(ubicacionViewRoute);
                       }
                     },
                     child: Row(

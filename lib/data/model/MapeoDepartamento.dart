@@ -20,7 +20,7 @@ class MapeoDepartamento {
     sId = json['_id'];
     departamento = json['departamento'];
     provincia = json['provincia'];
-    mapa= json['mapa'].toString();
+    mapa= jsonEncode(json['mapa']);
   }
 
   Map<String, dynamic> toJson() {

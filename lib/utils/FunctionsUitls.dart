@@ -18,3 +18,13 @@ Map<String, dynamic> loginFacebookJson(String access, String firebase) {
   data['fcm_token'] = firebase;
   return data;
 }
+Map<String, dynamic> directionUserJson(String direccion, String referencia,double latitude,double longitud) {
+  Map<String, dynamic> data = new Map<String, dynamic>();
+
+  data['adress'] = direccion.toString();
+  data['latitude'] = latitude.toString();
+  data['longitude'] = longitud.toString();
+  data['altitude'] = "3857";
+  data['reference'] = referencia.isEmpty?"Sin referencia":referencia;
+  return data;
+}

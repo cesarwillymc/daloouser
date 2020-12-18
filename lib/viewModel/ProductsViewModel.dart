@@ -13,8 +13,10 @@ import 'package:daloouser/data/model/MapeoDepartamento.dart';
 import 'package:daloouser/data/model/Prices.dart';
 import 'package:daloouser/data/model/ProductoData.dart';
 import 'package:daloouser/data/model/PromocionesModel.dart';
+import 'package:daloouser/data/model/SendCarrito.dart';
 import 'package:daloouser/data/model/ServiceItem.dart';
 import 'package:daloouser/data/model/ServiceModel.dart';
+import 'package:daloouser/data/model/UsuarioModel.dart';
 import 'package:daloouser/data/network/DialogService.dart';
 import 'package:daloouser/data/network/MainRepository.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
@@ -468,5 +470,38 @@ class ProductsViewModel extends BaseModel {
 
         }
       });
+   }
+  Stream<Resource> updateDirecctionUrl(String direccion, String referencia,double latitude,double longitud) async*{
+    yield Resource.loading(0);
+    try{
+      var respuesta=await _mainRepository.updateDirecctionUrl(direccion,referencia,latitude,longitud);
+      if(respuesta){
+        UsuarioModel usuario=boxList[3].getAt(0);
+        print("antiguoUsuario $usuario");
+        usuario.latitude=latitude;
+        usuario.longitude=longitud;
+        usuario.address=direccion;
+        print("nuevoUsuario $usuario");
+        boxList[3].putAt(0, usuario);
+        yield Resource.complete(true);
+      }
+    }catch(e){
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+
+   }
+   Stream<Resource> sendProductsCarrito(SendCarrito model) async*{
+    yield Resource.loading(0);
+    try{
+      var respuesta=await _mainRepository.sendProductsCarrito(model);
+      if(respuesta){
+        yield Resource.complete(true);
+      }
+    }catch(e){
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+
    }
 }

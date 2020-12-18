@@ -10,6 +10,7 @@ import 'package:daloouser/src/pages/introduction/IntroducctionPage.dart';
 import 'package:daloouser/src/screen/MainScreen.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:daloouser/utils/manager/DialogManager.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -54,6 +55,7 @@ Future<List<Box>> _openBox() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _openBox();
+  await Firebase.initializeApp();
   setupLocator();
   runApp(MyApp());
 }

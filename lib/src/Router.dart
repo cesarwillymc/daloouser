@@ -3,6 +3,7 @@ import 'package:daloouser/src/pages/PreviewCategoriasPage.dart';
 import 'package:daloouser/src/pages/PreviewProductoPage.dart';
 import 'package:daloouser/src/pages/PreviewServicePage.dart';
 import 'package:daloouser/src/pages/SphashScreen.dart';
+import 'package:daloouser/src/pages/ubication/UbicationPage.dart';
 import 'package:daloouser/src/screen/MainScreen.dart';
 import 'package:daloouser/utils/Constant.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +34,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case PreviewCategoriaPageViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: PreviewCategoriasPage((settings.arguments as List<String>)[0],
-            (settings.arguments as List<String>)[1],(settings.arguments as List<String>)[2]),
+        viewToShow: PreviewCategoriasPage(
+            (settings.arguments as List<String>)[0],
+            (settings.arguments as List<String>)[1],
+            (settings.arguments as List<String>)[2]),
       );
     case SignInViewRoute:
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: LoginAuthPage(),
+      );
+    case ubicacionViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: UbicationPage(),
       );
     default:
       return MaterialPageRoute(

@@ -61,7 +61,7 @@ class _InputFieldState extends State<InputField> {
         Container(
           height: widget.smallVersion ? 40 : fieldHeight,
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: EdgeInsets.symmetric(horizontal: 5),
           decoration:
           widget.isReadOnly ?  BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: Colors.grey[100]) : BoxDecoration(
@@ -121,7 +121,7 @@ class _InputFieldState extends State<InputField> {
           ),
         if (widget.additionalNote != null) SizedBox(height: 5),
         if (widget.additionalNote != null) NoteText(widget.additionalNote),
-        SizedBox(height: 10.0)
+
       ],
     );
   }

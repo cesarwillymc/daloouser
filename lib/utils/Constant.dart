@@ -5,12 +5,17 @@ import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 import '../Locator.dart';
 import '../main.dart';
 import 'FunctionsUitls.dart';
-
+import 'package:intent/intent.dart' as android_intent;
+import 'package:intent/extra.dart' as android_extra;
+import 'package:intent/typedExtra.dart' as android_typedExtra;
+import 'package:intent/action.dart' as android_action;
 const String SignInViewRoute = "LoginView";
+const String ubicacionViewRoute = "ubicacionViewRoute";
 const String SignUpViewRoute = "SignUp";
 const String MainScreenViewRoute = "MainScreenViewRoute";
 const String SplashScreenViewRoute = "SplashScreen";
@@ -34,6 +39,7 @@ const String polylineBOXHIVE = "polylineBOXHIVE";
 
 const String sharedPrefToken = "sharedPrefToken";
 const String sharedPrefIntro = "sharedPrefIntro";
+const String sharedPrefCARRITO_ID = "PREF_TEMP_CARRITO_ID";
 //Colors
 final Color primaryColor = Color(convertColorHex("#004E98"));
 
@@ -96,6 +102,21 @@ enum ResourceState{
 bool comprobarLogin(){
   if(boxList[3].isEmpty){
     locator<NavigationService>().navigateTo(SignInViewRoute);
+    return false;
   }
   return true;
+}
+
+void callPhone(String phone){
+  android_intent.Intent()
+    ..setAction(android_action.Action.ACTION_DIAL)
+    ..setData(Uri(scheme: 'tel', path: phone.toString()))
+    ..startActivity().catchError((e) => print(e));
+}
+launchWhatsApp(String phone, String message) async {
+  final link = WhatsAppUnilink(
+    phoneNumber: phone,
+    text: message,
+  );
+  await launch('$link');
 }
