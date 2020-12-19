@@ -206,51 +206,56 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
                     builder: (context, model, child) => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () async {
-                                await showDialog(context: context,builder:(llllll)=>_preguntarAcceso(
-                                    "¿Recibiste tu pedido?",
-                                    "Si recibiste el pedido dale a si para terminarlo.",llllll) ).then((value){
-                                  if (value) {
-                                    model.terminarPedido().listen((event) {
-                                      switch (event.state) {
-                                        case ResourceState.COMPLETE:
-                                          Toast.show(
-                                              "Pedido terminado correctamente",
-                                              context,
-                                              duration: 5);
-                                          _comentariosRating(model);
-                                          break;
-                                        case ResourceState.ERROR:
-                                          Toast.show(event.exception, context);
-                                          break;
-                                        case ResourceState.LOADING:
-                                          break;
-                                      }
-                                    });
-                                  } else {
-                                    return false;
-                                  }
-                                });
+                            Visibility(
+                              visible: mostrarTerminarPedido,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await showDialog(context: context,builder:(llllll)=>_preguntarAcceso(
+                                      "¿Recibiste tu pedido?",
+                                      "Si recibiste el pedido dale a si para terminarlo.",llllll) ).then((value){
+                                        var idOrder= infoOrder.get("idPedido").toString();
+                                    if (value) {
+                                      model.terminarPedido().listen((event) {
+                                        switch (event.state) {
+                                          case ResourceState.COMPLETE:
+                                            Toast.show(
+                                                "Pedido terminado correctamente",
+                                                context,
+                                                duration: 5);
+                                            _comentariosRating(model,idOrder);
+
+                                            break;
+                                          case ResourceState.ERROR:
+                                            Toast.show(event.exception, context);
+                                            break;
+                                          case ResourceState.LOADING:
+                                            break;
+                                        }
+                                      });
+                                    } else {
+                                      return false;
+                                    }
+                                  });
 
 
 
-                              },
-                              child: Card(
-                                color: primaryColor,
-                                child: Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: Center(
-                                      child: Text(
-                                        "Recibi el pedido",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
-                                      ),
-                                    )),
+                                },
+                                child: Card(
+                                  color: primaryColor,
+                                  child: Container(
+                                      padding: EdgeInsets.all(15),
+                                      child: Center(
+                                        child: Text(
+                                          "Recibi el pedido",
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 16),
+                                        ),
+                                      )),
+                                ),
                               ),
                             ),
                             Visibility(
-                              visible: mostrarTerminarPedido,
+                              visible: mostrarCancelarPedido,
                               child: GestureDetector(
                                 onTap: () async {
                                   await showDialog(context: context,builder:(llllll)=>_preguntarAcceso(
@@ -264,6 +269,7 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
                                                 "Pedido cancelado correctamente",
                                                 context,
                                                 duration: 5);
+
 
                                             break;
                                           case ResourceState.ERROR:
@@ -332,14 +338,15 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
     }catch(e){}
     super.dispose();
   }
-  void _comentariosRating(ProductsViewModel model)  {
+  void _comentariosRating(ProductsViewModel model,String id)  {
     bool llenoRider=false;
     bool llenoService=false;
-    AlertDialog(
+    showDialog(context: context,builder: (jjj)=>AlertDialog(
       title: Center(
         child: Text('Califica al  servicio'),
       ),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "Califica a tus tiendas",
@@ -349,11 +356,11 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
             height: 5,
           ),
           RatingBar.builder(
-            initialRating: 3,
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: true,
             itemCount: 5,
+            itemSize: 30,
             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
             itemBuilder: (context, _) => Icon(
               Icons.star,
@@ -361,12 +368,15 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
             ),
             onRatingUpdate: (rating) async {
 
-              model.calificarRiderAndService(rating, false).listen((event) {
+              model.calificarRiderAndService(rating, false,id).listen((event) {
                 switch (event.state) {
                   case ResourceState.COMPLETE:
                     llenoService=true;
                     if(llenoRider){
-                      Navigator.of(context).pop;
+                      setState(() {
+                        acceso=false;
+                      });
+                      Navigator.of(jjj).pop();
                     }
 
                     break;
@@ -392,10 +402,10 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
             height: 5,
           ),
           RatingBar.builder(
-            initialRating: 3,
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: true,
+            itemSize: 30,
             itemCount: 5,
             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
             itemBuilder: (context, _) => Icon(
@@ -403,12 +413,16 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
               color: Colors.amber,
             ),
             onRatingUpdate: (rating) {
-              model.calificarRiderAndService(rating, true).listen((event) {
+              model.calificarRiderAndService(rating, true,id).listen((event) {
                 switch (event.state) {
                   case ResourceState.COMPLETE:
                     llenoRider=true;
                     if(llenoService){
-                      Navigator.of(context).pop;
+                      setState(() {
+                        acceso=false;
+                      });
+                      Navigator.of(jjj).pop();
+
                     }
                     break;
                   case ResourceState.ERROR:
@@ -427,11 +441,17 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
       actions: <Widget>[
         FlatButton(
           child: Text('OMITIR',style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold),),
-          onPressed: Navigator.of(context).pop,
+          onPressed:(){
+            setState(() {
+              acceso=false;
+            });
+            Navigator.of(jjj).pop();
+          },
+
         ),
 
       ],
-    );
+    ));
   }
 
   Widget _carritoBoundPrivate(QueryDocumentSnapshot doc) {
@@ -446,9 +466,19 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
 
 
         bool estado = true;
-        if (!(event.get("servicio_accept") as bool)) {
+        if((event.get("rider_accept") as bool)){
           setState(() {
             mostrarTerminarPedido = true;
+          });
+
+        }
+        if (!(event.get("servicio_accept") as bool)) {
+          setState(() {
+            mostrarCancelarPedido = true;
+          });
+        }else{
+          setState(() {
+            mostrarCancelarPedido = false;
           });
         }
         if (event.get("order_cancel") as bool) {
@@ -459,7 +489,7 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
         }
 
         setState(() {
-        //  mostrarTerminarPedido = mostrar;
+        //  mostrarCancelarPedido = mostrar;
           acceso = estado;
           infoOrder = event;
         });
@@ -507,6 +537,7 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
   }
 
   Timer cronometro;
+  bool mostrarCancelarPedido = false;
   bool mostrarTerminarPedido = false;
 
   void _setCronometro() {
@@ -521,9 +552,9 @@ class _MiPedidoPageState extends State<MiPedidoPage> {
       print("$seconds $minutes $hours $days");
       setState(() {
         if (days != 0) {
-          mostrarTerminarPedido = true;
+          mostrarCancelarPedido = true;
         } else {
-          mostrarTerminarPedido = hours >= 1;
+          mostrarCancelarPedido = hours >= 1;
         }
       });
     });

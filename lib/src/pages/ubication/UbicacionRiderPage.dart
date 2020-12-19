@@ -40,18 +40,18 @@ class _UbicationRiderPageState extends State<UbicationRiderPage> {
   }
   void _getUserLocation() async {
     usuario = boxList[3].getAt(0);
-    var position = await _getLocation();
-    _kGooglePlex = CameraPosition(
-      target: usuario.latitude != null ? LatLng(
-          usuario.latitude, usuario.longitude) : LatLng(
-          position.latitude, position.longitude),
-      zoom: 16,
-    );
+    setState(() {
+      _kGooglePlex = CameraPosition(
+        target: LatLng(
+            usuario.latitude, usuario.longitude),
+        zoom: 16,
+      );
+    });
 
     var valueuser = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(size: Size(100, 100)), "assets/marker_daloo.png");
     var valuerider = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size(100, 100)), "assets/markerrider.png");
+        ImageConfiguration(size: Size(100, 100)), "assets/rider.png");
 
     setState(() {
       marcador = valueuser;
@@ -59,9 +59,7 @@ class _UbicationRiderPageState extends State<UbicationRiderPage> {
       if (usuario.latitude != null) {
         setMarker(LatLng(usuario.latitude, usuario.longitude),false);
       }
-      _lastMapPosition = usuario.latitude != null
-          ? LatLng(usuario.latitude, usuario.longitude)
-          : LatLng(position.latitude, position.longitude);
+      _lastMapPosition =LatLng(usuario.latitude, usuario.longitude);
 
     });
   }
@@ -87,15 +85,7 @@ class _UbicationRiderPageState extends State<UbicationRiderPage> {
           child: Text("Cargando"),
         )
             : model.permissionGranted
-            ? _kGooglePlex != null ? _googleMapsWidget() : Center(
-          child: Row(
-            children: [
-              CircularProgressIndicator(),
-              Text("Cargando")
-            ],
-          ),
-        )
-            : Center(
+            ? _googleMapsWidget() :  Center(
           child: Row(
             children: [
               CircularProgressIndicator(),
@@ -111,19 +101,23 @@ class _UbicationRiderPageState extends State<UbicationRiderPage> {
 
   void setMarker(LatLng point, bool isRider) {
      String markerId ;
+     String title;
     setState(() {
       if(isRider){
           markerId= "2";
+          title="Rider";
         try{
           _markers.remove(_markers.elementAt(1));
         }catch(e){}
       }else{
+        title="Mi location";
         markerId= "1";
       }
       _markers.add(Marker(
           markerId: MarkerId(markerId),
           position: point,
-          icon:isRider?marcadorrider: marcador != null ? marcador : BitmapDescriptor.defaultMarker));
+          infoWindow: InfoWindow(title: title),
+          icon:isRider?marcadorrider: marcador != null ? marcador : marcadorrider));
     });
   }
   BitmapDescriptor marcador;
@@ -142,9 +136,6 @@ class _UbicationRiderPageState extends State<UbicationRiderPage> {
             },
             markers: _markers,
           ),
-        ),
-        Center(
-          child: Image.asset("assets/marker_daloo.png"),
         ),
       ],
     );

@@ -201,7 +201,7 @@ class _CarritoPageState extends State<CarritoPage> {
                                             case  ResourceState.COMPLETE :
                                               if(eventoo.data as bool){
                                                 Toast.show("Pedido Solicitado", context,duration: 5);
-                                                Future.delayed(Duration(seconds: 5), () {
+                                                Future.delayed(Duration(seconds: 2), () {
                                                   // 5s over, navigate to a new page
                                                   locator<NavigationService>().navigateToClearStack(MainScreenViewRoute,arguments: MiPedidoPage());
                                                 });

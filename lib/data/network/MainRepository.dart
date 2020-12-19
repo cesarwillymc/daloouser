@@ -319,17 +319,17 @@ class MainRepository{
       throw Exception("Error en la red ${response.statusCode}");
     }
   }
-  Future<bool> calificarRiderAndService(double calificacion, bool isrider) async {
-    var idOrder=shared.getString(sharedPrefCARRITO_ID);
+  Future<bool> calificarRiderAndService(double calificacion, bool isrider, String id) async {
+
     String url;
     if(isrider){
-      url="customer/riderRating/$idOrder";
+      url="customer/riderRating/$id";
     }else{
-      url="customer/serviceRating/$idOrder";
+      url="customer/serviceRating/$id";
     }
     var palabraUrl=BASE_URL_API+url;
     var token =shared.getString(sharedPrefToken);
-    final response =await http.post(palabraUrl,body: calificacionJson(calificacion),headers: {HttpHeaders.authorizationHeader:token,HttpHeaders.contentTypeHeader:"application/json"} );
+    final response =await http.post(palabraUrl,body: calificacionJson(calificacion),headers: {HttpHeaders.authorizationHeader:token} );
     if(response.statusCode==200){
       return true;
     }else{

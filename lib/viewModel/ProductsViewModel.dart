@@ -530,10 +530,10 @@ class ProductsViewModel extends BaseModel {
     }
 
   }
-  Stream<Resource> calificarRiderAndService(double calificacion,bool isrider) async*{
+  Stream<Resource> calificarRiderAndService(double calificacion,bool isrider, String id) async*{
     yield Resource.loading(0);
     try{
-      var respuesta=await _mainRepository.calificarRiderAndService(calificacion, isrider);
+      var respuesta=await _mainRepository.calificarRiderAndService(calificacion, isrider,id);
       if(respuesta){
         yield Resource.complete(true);
       }
