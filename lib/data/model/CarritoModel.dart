@@ -29,16 +29,16 @@ class CarritoModel{
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = new Map<String, dynamic>();
 
-    data['idServicio'] = this.idServicio;
-    data['id_Product'] = this.id_Product;
-    data['id_Precio'] = this.id_Precio;
-    data['nameService'] = this.nameService;
-    data['cantidad'] = this.cantidad;
-    data['name'] = this.name;
-    data['subName'] = this.subName;
-    data['imgUrl'] = this.imgUrl;
-    data['precioTotal'] = this.precioTotal;
-    data['precioUnitari'] = this.precioUnitari;
+    data['idServicio'] = this.idServicio.toString();
+    data['id_Product'] = this.id_Product.toString();
+    data['id_Precio'] = this.id_Precio.toString();
+    data['nameService'] = this.nameService.toString();
+    data['cantidad'] = this.cantidad.toString();
+    data['name'] = this.name.toString();
+    data['subName'] = this.subName.toString();
+    data['imgUrl'] = this.imgUrl.toString();
+    data['precioTotal'] = this.precioTotal.toString();
+    data['precioUnitari'] = this.precioUnitari.toString();
     return data;
   }
 }

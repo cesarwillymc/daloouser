@@ -6,10 +6,20 @@ import 'package:flutter/material.dart';
 
 
 class CardServicesFirebase extends StatelessWidget{
+  QueryDocumentSnapshot model;
+  CardServicesFirebase(this.model);
 
 
+  String textoState="Esperando";
   @override
   Widget build(BuildContext context) {
+
+    if(model.get("accepted") as bool){
+      textoState="Aceptado";
+    }
+    if(model.get("cancel") as bool){
+      textoState="Cancelado";
+    }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
       decoration: BoxDecoration(
@@ -38,7 +48,7 @@ class CardServicesFirebase extends StatelessWidget{
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                        image: AssetImage("assets/comida.jpg"),
+                        image: NetworkImage(BASE_URL_AMAZON_IMG+model.get("imgService")??""),
                         fit:BoxFit.cover
                     )
 
@@ -56,13 +66,13 @@ class CardServicesFirebase extends StatelessWidget{
                         children: [
                           Container(
                               width: MediaQuery.of(context).size.width*0.4,
-                              child: Text("La mona cevicheriaaaaaaaaaaa",style: TextStyle(fontWeight: FontWeight.bold),maxLines: 3,overflow: TextOverflow.ellipsis,)),
+                              child: Text(model.get("nameService")??"No cargo",style: TextStyle(fontWeight: FontWeight.bold),maxLines: 3,overflow: TextOverflow.ellipsis,)),
                           Card(
                             color: Colors.red,
                             child: Container(
                                 width: MediaQuery.of(context).size.width*0.18,
                               padding: EdgeInsets.all(5),
-                                child: Center(child: Text("EsperaAAAndo",style: TextStyle(color: Colors.white,fontSize: 10),overflow:TextOverflow.ellipsis ,))),
+                                child: Center(child: Text(textoState,style: TextStyle(color: Colors.white,fontSize: 10),overflow:TextOverflow.ellipsis ,))),
                           )
                         ],
                       ),
@@ -74,12 +84,12 @@ class CardServicesFirebase extends StatelessWidget{
                               Container(
                                 width: MediaQuery.of(context).size.width*0.4,
                                 alignment: Alignment.centerLeft,
-                                child: Text("2 ordenes"),),
+                                child: Text("${model.get("cantidadOrdenes")??"No cargo"} ordenes"),),
                               Container(
                                 width: MediaQuery.of(context).size.width*0.4,
                                 child: Row(
                                   children: [
-                                    Text("5",style: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),),
+                                    Text(model.get("rating")??"No cargo",style: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold),),
                                     Icon(Icons.star,color: primaryColor,size: 18,),
                                   ],
                                 ),
@@ -88,7 +98,7 @@ class CardServicesFirebase extends StatelessWidget{
                           ),
 
                           FloatingActionButton(onPressed: (){
-                            callPhone("962601310");
+                            callPhone(model.get("phone")??"No cargo");
 
                           },child: Icon(Icons.call,color: Colors.white,),backgroundColor: primaryColor,
                           )

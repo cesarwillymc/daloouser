@@ -8,6 +8,7 @@ import 'package:daloouser/data/model/MapeoDepartamento.dart';
 import 'package:daloouser/data/model/SendCarrito.dart';
 import 'package:daloouser/data/model/UsuarioModel.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
+import 'package:daloouser/src/pages/MiPedidoPage.dart';
 import 'package:daloouser/src/widget/buttons/TipePriceCardInactive.dart';
 import 'package:daloouser/src/widget/card/CardCarritoItem.dart';
 import 'package:daloouser/src/widget/imput/InputField.dart';
@@ -38,6 +39,27 @@ class _CarritoPageState extends State<CarritoPage> {
   //Datos Generales
   MapeoDepartamento mapeo;
   List<LatLng> polilyne = List<LatLng>();
+  bool result ;
+  @override
+  void initState() {
+    super.initState();
+    _inicializarDatos();
+  }
+  void _inicializarDatos()async{
+    if (boxList[5].isNotEmpty) {
+      mapeo = boxList[5].getAt(0);
+    }
+    if (mapeo != null) {
+      List<LatLng> lista = List<LatLng>();
+      await Stream.fromIterable(jsonDecode(mapeo.mapa)).forEach((element) {
+        lista.add(LatLng(double.parse(element["latitude"].toString()),
+            double.parse(element["longitude"].toString())));
+      });
+      setState(() {
+        polilyne.addAll(lista);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductsViewModel>.reactive(builder: (context,model,child)=>
@@ -69,7 +91,7 @@ class _CarritoPageState extends State<CarritoPage> {
               ),
               bottomNavigationBar: ValueListenableBuilder(
                 valueListenable: boxList[4].listenable(),
-                builder: (context4,boxdata,widget){
+                builder: (context4,boxdata,widget)  {
 
                   var usuario= boxList[3];
 
@@ -77,6 +99,14 @@ class _CarritoPageState extends State<CarritoPage> {
                   if(carrito.isEmpty){
                     if(boxList[4].isNotEmpty && usuario.isNotEmpty){
                       if((usuario.getAt(0) as UsuarioModel).longitude!=null){
+                        print("resultado entro");
+                         GoogleMapPolyUtil.containsLocation(
+                            point: LatLng((usuario.getAt(0) as UsuarioModel).latitude, (usuario.getAt(0) as UsuarioModel).longitude), polygon: polilyne,geodesic: true).then((value){
+                           print("resultado $value");
+                           result=value;
+                           //print("shared $result ${LatLng(user.latitude, user.longitude)}");
+                        });
+
                         DataServiceCarritoModel inicio=boxdata.getAt(0);
                         LatLng usuarioLatLong=LatLng((usuario.getAt(0) as UsuarioModel).latitude, (usuario.getAt(0) as UsuarioModel).longitude);
                         var acceso= getDirectionUrl(LatLng(inicio.latitude, inicio.longitude), usuarioLatLong);
@@ -88,6 +118,12 @@ class _CarritoPageState extends State<CarritoPage> {
                     }
                     model.insertarPrecio(0.0);
                   }else{
+                    GoogleMapPolyUtil.containsLocation(
+                        point: LatLng((usuario.getAt(0) as UsuarioModel).latitude, (usuario.getAt(0) as UsuarioModel).longitude), polygon: polilyne,geodesic: true).then((value){
+                      print("resultado ${LatLng((usuario.getAt(0) as UsuarioModel).latitude, (usuario.getAt(0) as UsuarioModel).longitude)} $value");
+                      result=value;
+                      //print("shared $result ${LatLng(user.latitude, user.longitude)}");
+                    });
                     model.insertarPrecio(carrito.getAt(0).Precio);
                   }
                  // if(boxdata.)
@@ -148,20 +184,26 @@ class _CarritoPageState extends State<CarritoPage> {
                                   content: new Text("¿Tu ubicación  es: ${user.address}?"),
                                   actions: <Widget>[
                                     new FlatButton(
-                                      onPressed: () =>    _navigationService.navigateTo(ubicacionViewRoute),
+                                      onPressed: ()
+                                      {
+                                      Navigator.pop(context);
+                                      _navigationService.navigateTo(ubicacionViewRoute);
+                                      } ,
                                       child: new Text("No, deseo cambiarlo"),
                                     ),
                                     new FlatButton(
                                       onPressed: () async {
+                                        Navigator.pop(context);
                                         CarritoPriceModel precio=carrito.getAt(0);
-                                        List<CarritoModel> valores= boxList[4].values.toList();
+                                        List<CarritoModel> valores= boxList[2].values.toList();
                                         model.sendProductsCarrito(SendCarrito(textComentario.text,"visa",valores,precio.url)).listen((eventoo) {
                                           switch(eventoo.state){
                                             case  ResourceState.COMPLETE :
                                               if(eventoo.data as bool){
+                                                Toast.show("Pedido Solicitado", context,duration: 5);
                                                 Future.delayed(Duration(seconds: 5), () {
                                                   // 5s over, navigate to a new page
-                                                  locator<NavigationService>().navigateToClearStack(MainScreenViewRoute,arguments: TiendasPage());
+                                                  locator<NavigationService>().navigateToClearStack(MainScreenViewRoute,arguments: MiPedidoPage());
                                                 });
 
                                               }else{
@@ -224,24 +266,17 @@ class _CarritoPageState extends State<CarritoPage> {
     );
   }
   Future<bool> comprobarTodosLosDatos() async {
-    if (boxList[5].isNotEmpty) {
-      mapeo = boxList[5].getAt(0);
-    }
+
     UsuarioModel user= boxList[3].getAt(0);
-    if (mapeo != null) {
-      await Stream.fromIterable(jsonDecode(mapeo.mapa)).forEach((element) {
-        polilyne.add(LatLng(double.parse(element["latitude"].toString()),
-            double.parse(element["longitude"].toString())));
-      });
-    }
+
     if(boxList[2].isNotEmpty){
       if(user.latitude!=null){
-        if(shared.getString(sharedPrefCARRITO_ID)??""!=""){
+
+        if(shared.getString(sharedPrefCARRITO_ID)!="null"){
 
           if(mapeo!=null){
-            bool result = await GoogleMapPolyUtil.containsLocation(
-                point: LatLng(user.latitude, user.longitude), polygon: polilyne);
-            if(result){
+
+            if(result??false){
               return true;
             }else{
               Toast.show("No estas dentro de un rango para solicitar un pedido", context);

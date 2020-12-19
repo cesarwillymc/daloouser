@@ -3,6 +3,7 @@ import 'package:daloouser/src/pages/PreviewCategoriasPage.dart';
 import 'package:daloouser/src/pages/PreviewProductoPage.dart';
 import 'package:daloouser/src/pages/PreviewServicePage.dart';
 import 'package:daloouser/src/pages/SphashScreen.dart';
+import 'package:daloouser/src/pages/ubication/UbicacionRiderPage.dart';
 import 'package:daloouser/src/pages/ubication/UbicationPage.dart';
 import 'package:daloouser/src/screen/MainScreen.dart';
 import 'package:daloouser/utils/Constant.dart';
@@ -48,6 +49,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: UbicationPage(),
+      );
+    case ubicacionTimeRealViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: UbicationRiderPage(settings.arguments),
       );
     default:
       return MaterialPageRoute(

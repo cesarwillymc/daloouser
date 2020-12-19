@@ -53,6 +53,7 @@ dependencies:
   intent: ^1.4.0
   url_launcher: ^5.7.10
   whatsapp_unilink: ^1.0.0+1
+  flutter_rating_bar: ^3.2.0+1
   permission_handler: ^5.0.1+1
   flutter_slidable:
   intl: ^0.16.1

@@ -28,3 +28,8 @@ Map<String, dynamic> directionUserJson(String direccion, String referencia,doubl
   data['reference'] = referencia.isEmpty?"Sin referencia":referencia;
   return data;
 }
+Map<String, dynamic> calificacionJson(double calificacion) {
+  Map<String, dynamic> data = new Map<String, dynamic>();
+  data['calificacion'] = calificacion.toString();
+  return data;
+}

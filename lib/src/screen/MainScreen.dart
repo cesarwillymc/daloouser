@@ -73,15 +73,17 @@ class _MainScreenState extends State<MainScreen> {
           .doc("User")
           .collection("Config")
           .doc(usuario.idUser);
-    }
-    query.snapshots().listen((event) {
+      query.snapshots().listen((event) {
         if(event.exists){
           var stateOrder = event.get("stateorder") as bool;
+          var idOrder = event.get("idorder") as String;
           if (stateOrder??false) {
-            shared.setBool(sharedPrefCARRITO_ID, stateOrder);
+            shared.setString(sharedPrefCARRITO_ID, idOrder);
           }
         }
-    });
+      });
+    }
+
     bool _searching = false;
     return Scaffold(
             bottomNavigationBar: BottomNavigationBar(

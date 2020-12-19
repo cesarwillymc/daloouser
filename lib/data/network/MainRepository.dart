@@ -22,6 +22,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../main.dart';
+
 class MainRepository{
   Future<List<ServiceItem>> searchProducts(String palabra) async {
     final String url="customer/search";
@@ -277,13 +279,57 @@ class MainRepository{
     var palabraUrl=BASE_URL_API+url;
 
     var cuerpo=model.toJson();
-    print(cuerpo);
+    print("cuerpo ${jsonEncode(cuerpo)}");
     var shared= await SharedPreferences.getInstance();
     var token =shared.getString(sharedPrefToken);
-
-
-    final response =await http.post(palabraUrl,body: cuerpo,headers: {HttpHeaders.authorizationHeader:token} );
+    final response =await http.post(palabraUrl,body: jsonEncode(cuerpo),headers: {HttpHeaders.authorizationHeader:token,HttpHeaders.contentTypeHeader:"application/json"} );
     print(palabraUrl);
+    if(response.statusCode==200){
+      return true;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<bool> cancelOrderPedido() async {
+    var idOrder= shared.getString(sharedPrefCARRITO_ID);
+    final String url="customer/cancelOrder/$idOrder";
+    var token =shared.getString(sharedPrefToken);
+    var palabraUrl=BASE_URL_API+url;
+
+    print("palabra $palabraUrl $token");
+    final response =await http.post(palabraUrl,headers: {HttpHeaders.authorizationHeader:token,HttpHeaders.contentTypeHeader:"application/json"} );
+    if(response.statusCode==200){
+      return true;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<bool> terminarPedido() async {
+    var idOrder=shared.getString(sharedPrefCARRITO_ID);
+    var token =shared.getString(sharedPrefToken);
+    final String url="customer/finishOrder/$idOrder";
+
+    var palabraUrl=BASE_URL_API+url;
+
+    print("palabra $palabraUrl $token");
+    final response =await http.post(palabraUrl,headers: {HttpHeaders.authorizationHeader:token,HttpHeaders.contentTypeHeader:"application/json"} );
+    if(response.statusCode==200){
+      return true;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<bool> calificarRiderAndService(double calificacion, bool isrider) async {
+    var idOrder=shared.getString(sharedPrefCARRITO_ID);
+    String url;
+    if(isrider){
+      url="customer/riderRating/$idOrder";
+    }else{
+      url="customer/serviceRating/$idOrder";
+    }
+    var palabraUrl=BASE_URL_API+url;
+    var token =shared.getString(sharedPrefToken);
+    final response =await http.post(palabraUrl,body: calificacionJson(calificacion),headers: {HttpHeaders.authorizationHeader:token,HttpHeaders.contentTypeHeader:"application/json"} );
     if(response.statusCode==200){
       return true;
     }else{

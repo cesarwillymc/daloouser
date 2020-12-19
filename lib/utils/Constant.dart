@@ -16,6 +16,7 @@ import 'package:intent/typedExtra.dart' as android_typedExtra;
 import 'package:intent/action.dart' as android_action;
 const String SignInViewRoute = "LoginView";
 const String ubicacionViewRoute = "ubicacionViewRoute";
+const String ubicacionTimeRealViewRoute = "ubicacionTimeRealViewRoute";
 const String SignUpViewRoute = "SignUp";
 const String MainScreenViewRoute = "MainScreenViewRoute";
 const String SplashScreenViewRoute = "SplashScreen";
@@ -39,6 +40,7 @@ const String polylineBOXHIVE = "polylineBOXHIVE";
 
 const String sharedPrefToken = "sharedPrefToken";
 const String sharedPrefIntro = "sharedPrefIntro";
+const String sharedPREF_TIME_PEDIDO = "PREF_TIME_PEDIDO";
 const String sharedPrefCARRITO_ID = "PREF_TEMP_CARRITO_ID";
 //Colors
 final Color primaryColor = Color(convertColorHex("#004E98"));

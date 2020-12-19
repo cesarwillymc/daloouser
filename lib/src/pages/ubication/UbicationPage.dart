@@ -28,11 +28,11 @@ class _UbicationPageState extends State<UbicationPage> {
   Completer<GoogleMapController> _controller = Completer();
 
   CameraPosition _kGooglePlex;
-
+  UsuarioModel usuario;
   Set<Marker> _markers = HashSet<Marker>();
   final textDireccion = TextEditingController();
   final textReferencia = TextEditingController();
-  UsuarioModel usuario;
+
   MapeoDepartamento mapeo;
   BitmapDescriptor marcador;
   List<LatLng> polilyne = List<LatLng>();

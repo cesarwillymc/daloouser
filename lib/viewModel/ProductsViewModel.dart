@@ -504,4 +504,43 @@ class ProductsViewModel extends BaseModel {
     }
 
    }
+  Stream<Resource> cancelarPedido() async*{
+    yield Resource.loading(0);
+    try{
+      var respuesta=await _mainRepository.cancelOrderPedido();
+      if(respuesta){
+        yield Resource.complete(true);
+      }
+    }catch(e){
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+
+  }
+  Stream<Resource> terminarPedido() async*{
+    yield Resource.loading(0);
+    try{
+      var respuesta=await _mainRepository.terminarPedido();
+      if(respuesta){
+        yield Resource.complete(true);
+      }
+    }catch(e){
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+
+  }
+  Stream<Resource> calificarRiderAndService(double calificacion,bool isrider) async*{
+    yield Resource.loading(0);
+    try{
+      var respuesta=await _mainRepository.calificarRiderAndService(calificacion, isrider);
+      if(respuesta){
+        yield Resource.complete(true);
+      }
+    }catch(e){
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+
+  }
 }
