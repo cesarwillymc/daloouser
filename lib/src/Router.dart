@@ -3,6 +3,10 @@ import 'package:daloouser/src/pages/PreviewCategoriasPage.dart';
 import 'package:daloouser/src/pages/PreviewProductoPage.dart';
 import 'package:daloouser/src/pages/PreviewServicePage.dart';
 import 'package:daloouser/src/pages/SphashScreen.dart';
+import 'package:daloouser/src/pages/history/HistoryPreviewPage.dart';
+import 'package:daloouser/src/pages/login/SendMessagePage.dart';
+import 'package:daloouser/src/pages/login/VerifyMessagePage.dart';
+import 'package:daloouser/src/pages/profile/ProfilePage.dart';
 import 'package:daloouser/src/pages/ubication/UbicacionRiderPage.dart';
 import 'package:daloouser/src/pages/ubication/UbicationPage.dart';
 import 'package:daloouser/src/screen/MainScreen.dart';
@@ -45,6 +49,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: LoginAuthPage(),
       );
+    case ProfilePageViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ProfilePage(),
+      );
     case ubicacionViewRoute:
       return _getPageRoute(
         routeName: settings.name,
@@ -54,6 +63,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: UbicationRiderPage(settings.arguments),
+      );
+    case HistoryPreviewPageViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: HistoryPreviewPage(settings.arguments),
+      );
+    case SendMessagePageViewRote:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: SendMessagePage(),
+      );
+    case VerifyMessagePageViewRote:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: VerifyMessagePage(settings.arguments),
       );
     default:
       return MaterialPageRoute(

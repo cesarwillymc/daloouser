@@ -16,7 +16,6 @@ class ListaProductosCategoria {
   ListaProductosCategoria(this.service, this.items);
 
   ListaProductosCategoria.fromJson(Map<String, dynamic> data){
-    print("getListProductswithService  ListaProductosCategoria$data");
     service =
     data['service'] != null ? new ServiceModel.fromJson(data['service']) : null;
     if (data['items'] != null) {

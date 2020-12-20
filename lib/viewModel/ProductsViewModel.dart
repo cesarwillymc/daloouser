@@ -6,6 +6,8 @@ import 'package:daloouser/data/model/CategoryModel.dart';
 import 'package:daloouser/data/model/ComentariosModel.dart';
 import 'package:daloouser/data/model/ComentariosStartModel.dart';
 import 'package:daloouser/data/model/DataServiceCarritoModel.dart';
+import 'package:daloouser/data/model/HistoryModel.dart';
+import 'package:daloouser/data/model/HistoryModelItem.dart';
 import 'package:daloouser/data/model/ListServices.dart';
 import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
@@ -21,6 +23,7 @@ import 'package:daloouser/data/network/DialogService.dart';
 import 'package:daloouser/data/network/MainRepository.dart';
 import 'package:daloouser/data/network/NavigationService.dart';
 import 'package:daloouser/utils/Constant.dart';
+import 'package:daloouser/utils/FunctionsUitls.dart';
 import 'package:daloouser/utils/Resource.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -89,13 +92,28 @@ class ProductsViewModel extends BaseModel {
   List<CategoryModel> get categorias => _categorias;
 
   void listenCategorias() {
+    if(!shared.getInt(sharedTimeLoadingThings2).toString().contains("null")){
+      if(!isFeechedHour(shared.getInt(sharedTimeLoadingThings2),24)){
+        _categorias = boxList[7].values.toList();
+        notifyListeners();
+        setBusy(false);
+      }else{
+        _calledlistenCategorias();
+      }
+    }else{
+      _calledlistenCategorias();
+    }
+
+  }
+  void _calledlistenCategorias(){
     setBusy(true);
     _mainRepository.getCategoriasProducts().then((cat) {
       List<CategoryModel> updatedCategory = cat;
-      print("Categorias $updatedCategory");
       if (cat != null) {
         _categorias = updatedCategory;
         _categorias.insert(0, CategoryModel("Todo", "", 1));
+        boxList[7].addAll(_categorias);
+        shared.setInt(sharedTimeLoadingThings2, DateTime.now().millisecond);
         notifyListeners();
         setBusy(false);
       } else {
@@ -109,12 +127,29 @@ class ProductsViewModel extends BaseModel {
   List<ListaProductosCategoria> get servicewithservice => _servicewithservice;
 
   void getListProductswithService() {
+
+    if(!shared.getInt(sharedTimeLoadingThings).toString().contains("null")){
+      if(!isFeechedHour(shared.getInt(sharedTimeLoadingThings),24)){
+            _servicewithservice = boxList[6].values.toList();
+            print("List de productos $_servicewithservice");
+            notifyListeners();
+            setBusy(false);
+      }else{
+        _calledgetListProductswithService();
+      }
+    }else{
+      _calledgetListProductswithService();
+    }
+
+  }
+  void _calledgetListProductswithService(){
     setBusy(true);
     _mainRepository.getListProductswithService().then((cat) {
       List<ListaProductosCategoria> updatedCategory = cat;
-      print("getListProductswithService subido $updatedCategory");
       if (cat != null) {
         _servicewithservice = updatedCategory;
+        boxList[6].addAll(updatedCategory);
+        shared.setInt(sharedTimeLoadingThings, DateTime.now().millisecond);
         notifyListeners();
         setBusy(false);
       } else {
@@ -122,7 +157,6 @@ class ProductsViewModel extends BaseModel {
       }
     });
   }
-
   ServiceModel _infoService;
 
   ServiceModel get infoService => _infoService;
@@ -306,7 +340,7 @@ class ProductsViewModel extends BaseModel {
     if (valueBoolean) {
       _mainRepository
           .getProductsByCategoria(
-              spinnerData, totalPaginasProducts, categoriaId)
+          spinnerData, totalPaginasProducts, categoriaId)
           .then((cat) {
         lista = cat;
         totalNetwoksItemProducts = lista[0].total;
@@ -415,7 +449,9 @@ class ProductsViewModel extends BaseModel {
 
   void obtenerNuevoPrecio(String acces) async {
     setBusy(true);
-    var size = Hive.box<DataServiceCarritoModel>(dataServiceBOXHIVE).length;
+    var size = Hive
+        .box<DataServiceCarritoModel>(dataServiceBOXHIVE)
+        .length;
     _mainRepository.getRutasGoogle(acces).then((cat) {
       if (cat != null) {
         var precio = fuctionPrice(cat[1], cat[0], size);
@@ -431,116 +467,195 @@ class ProductsViewModel extends BaseModel {
     _timeandDistance = precio;
     notifyListeners();
   }
-  Stream<Resource> loginWithFacebookorGmail(String acces,{bool isFacebook=true}) async*{
+
+  Stream<Resource> loginWithFacebookorGmail(String acces,
+      {bool isFacebook = true}) async* {
     yield Resource.loading(0);
     setBusy(true);
-    try{
-     await _mainRepository.loginWithFacebookorGmail(acces,isFacebook);
-     var usuario=await _mainRepository.getInformationUser();
-     if(usuario!=null){
-        if(usuario.validateNumber){
+    try {
+      await _mainRepository.loginWithFacebookorGmail(acces, isFacebook);
+      var usuario = await _mainRepository.getInformationUser();
+      if (usuario != null) {
+        if (usuario.validateNumber) {
           boxList[3].add(usuario);
           yield Resource.complete(true);
-        }else{
+        } else {
           yield Resource.complete(false);
         }
         setBusy(false);
         notifyListeners();
-     }
-    }catch(e){
+      }
+    } catch (e) {
       print(e);
       yield Resource.error("Surgio un error");
       setBusy(false);
       notifyListeners();
     }
-    
   }
 
   //Obtener Ruta
-   void getPoliline(){
-      _mainRepository.getPoliline().then((value) {
-        MapeoDepartamento mapa=value;
-        if(mapa!=null){
-          if(boxList[5].isEmpty){
-            boxList[5].add(mapa);
-          }
-
-         // var mapa=(boxList[5].getAt(0) as MapeoDepartamento).mapa;
-         // print("mapa ${mapa}");
-
+  void getPoliline() {
+    _mainRepository.getPoliline().then((value) {
+      MapeoDepartamento mapa = value;
+      if (mapa != null) {
+        if (boxList[5].isEmpty) {
+          boxList[5].add(mapa);
         }
-      });
-   }
-  Stream<Resource> updateDirecctionUrl(String direccion, String referencia,double latitude,double longitud) async*{
+
+        // var mapa=(boxList[5].getAt(0) as MapeoDepartamento).mapa;
+        // print("mapa ${mapa}");
+
+      }
+    });
+  }
+
+  Stream<Resource> updateDirecctionUrl(String direccion, String referencia,
+      double latitude, double longitud) async* {
     yield Resource.loading(0);
-    try{
-      var respuesta=await _mainRepository.updateDirecctionUrl(direccion,referencia,latitude,longitud);
-      if(respuesta){
-        UsuarioModel usuario=boxList[3].getAt(0);
+    try {
+      var respuesta = await _mainRepository.updateDirecctionUrl(
+          direccion, referencia, latitude, longitud);
+      if (respuesta) {
+        UsuarioModel usuario = boxList[3].getAt(0);
         print("antiguoUsuario $usuario");
-        usuario.latitude=latitude;
-        usuario.longitude=longitud;
-        usuario.address=direccion;
+        usuario.latitude = latitude;
+        usuario.longitude = longitud;
+        usuario.address = direccion;
         print("nuevoUsuario $usuario");
         boxList[3].putAt(0, usuario);
         yield Resource.complete(true);
       }
-    }catch(e){
+    } catch (e) {
       print("errorupdate $e ");
       yield Resource.error("Surgio un error");
     }
-
-   }
-   Stream<Resource> sendProductsCarrito(SendCarrito model) async*{
-    yield Resource.loading(0);
-    try{
-      var respuesta=await _mainRepository.sendProductsCarrito(model);
-      if(respuesta){
-        yield Resource.complete(true);
-      }
-    }catch(e){
-      print("errorupdate $e ");
-      yield Resource.error("Surgio un error");
-    }
-
-   }
-  Stream<Resource> cancelarPedido() async*{
-    yield Resource.loading(0);
-    try{
-      var respuesta=await _mainRepository.cancelOrderPedido();
-      if(respuesta){
-        yield Resource.complete(true);
-      }
-    }catch(e){
-      print("errorupdate $e ");
-      yield Resource.error("Surgio un error");
-    }
-
   }
-  Stream<Resource> terminarPedido() async*{
+
+  Stream<Resource> sendProductsCarrito(SendCarrito model) async* {
     yield Resource.loading(0);
-    try{
-      var respuesta=await _mainRepository.terminarPedido();
-      if(respuesta){
+    try {
+      var respuesta = await _mainRepository.sendProductsCarrito(model);
+      if (respuesta) {
         yield Resource.complete(true);
       }
-    }catch(e){
+    } catch (e) {
       print("errorupdate $e ");
       yield Resource.error("Surgio un error");
     }
-
   }
-  Stream<Resource> calificarRiderAndService(double calificacion,bool isrider, String id) async*{
+
+  Stream<Resource> cancelarPedido() async* {
     yield Resource.loading(0);
-    try{
-      var respuesta=await _mainRepository.calificarRiderAndService(calificacion, isrider,id);
-      if(respuesta){
+    try {
+      var respuesta = await _mainRepository.cancelOrderPedido();
+      if (respuesta) {
         yield Resource.complete(true);
       }
-    }catch(e){
+    } catch (e) {
       print("errorupdate $e ");
       yield Resource.error("Surgio un error");
     }
+  }
 
+  Stream<Resource> terminarPedido() async* {
+    yield Resource.loading(0);
+    try {
+      var respuesta = await _mainRepository.terminarPedido();
+      if (respuesta) {
+        yield Resource.complete(true);
+      }
+    } catch (e) {
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+  }
+
+  Stream<Resource> calificarRiderAndService(double calificacion, bool isrider,
+      String id) async* {
+    yield Resource.loading(0);
+    try {
+      var respuesta = await _mainRepository.calificarRiderAndService(
+          calificacion, isrider, id);
+      if (respuesta) {
+        yield Resource.complete(true);
+      }
+    } catch (e) {
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+  }
+
+  List<HistoryModelItem> _getHistory;
+
+  List<HistoryModelItem> get getHistory => _getHistory;
+
+  void getHistoryItems() async {
+    setBusy(true);
+    _mainRepository.getHistoryItems().then((cat) {
+      if (cat != null) {
+        _getHistory = cat;
+        setBusy(false);
+        notifyListeners();
+      }
+    });
+  }
+  HistoryModel _historyById;
+
+  HistoryModel get historyById => _historyById;
+
+  void getHistoryById(String id) async {
+    setBusy(true);
+    _mainRepository.getHistoryById(id).then((cat) {
+      if (cat != null) {
+        _historyById = cat;
+        setBusy(false);
+        notifyListeners();
+      }
+    });
+  }
+  Stream<Resource> descargarBoletaventa(String id) async* {
+    yield Resource.loading(0);
+    try {
+      var respuesta = await _mainRepository.descargarBoletaventa(id);
+      yield Resource.complete(respuesta);
+
+    } catch (e) {
+      print("errorupdate $e ");
+      yield Resource.error("Surgio un error");
+    }
+  }
+  Stream<Resource> validateCodePhone(String phone,String code) async* {
+    yield Resource.loading(0);
+    setBusy(true);
+    try {
+      var respuesta = await _mainRepository.validateCodePhone(phone,code);
+      yield Resource.complete(respuesta);
+      setBusy(false);
+      notifyListeners();
+    } catch (e) {
+      yield Resource.error("Surgio un error");
+      setBusy(false);
+      notifyListeners();
+    }
+  }
+  Stream<Resource> sendMessagePhone(String phone) async* {
+    yield Resource.loading(0);
+    setBusy(true);
+    try {
+      await _mainRepository.sendMessagePhone(phone);
+      var usuario = await _mainRepository.getInformationUser();
+      if(usuario!=null){
+        boxList[3].add(usuario);
+        yield Resource.complete(true);
+      }else{
+        yield Resource.complete(false);
+      }
+      setBusy(false);
+      notifyListeners();
+    } catch (e) {
+      yield Resource.error("Surgio un error");
+      setBusy(false);
+      notifyListeners();
+    }
   }
 }

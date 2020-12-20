@@ -17,12 +17,16 @@ import 'package:intent/action.dart' as android_action;
 const String SignInViewRoute = "LoginView";
 const String ubicacionViewRoute = "ubicacionViewRoute";
 const String ubicacionTimeRealViewRoute = "ubicacionTimeRealViewRoute";
+const String HistoryPreviewPageViewRoute = "HistoryPreviewPageViewRoute";
 const String SignUpViewRoute = "SignUp";
 const String MainScreenViewRoute = "MainScreenViewRoute";
 const String SplashScreenViewRoute = "SplashScreen";
 const String PreviewProductViewRoute = "PreviewProductViewRoute";
 const String PreviewServiceViewRoute = "PreviewServiceViewRoute";
 const String PreviewCategoriaPageViewRoute = "PreviewCategoriaPageViewRoute";
+const String ProfilePageViewRoute = "ProfilePageViewRoute";
+const String VerifyMessagePageViewRote = "VerifyMessagePageViewRote";
+const String SendMessagePageViewRote = "SendMessagePageViewRote";
 
 const String BASE_URL_API = "http://64.52.85.15:4000/api/";
 
@@ -36,12 +40,16 @@ const String carritoBOXHIVE = "carritoBOXHIVE";
 const String dataServiceBOXHIVE = "dataServiceBOXHIVE";
 const String priceCarritoBOXHIVE = "priceCarritoBOXHIVE";
 const String polylineBOXHIVE = "polylineBOXHIVE";
+const String ListaProductosCategoriaBoxHive = "ListaProductosCategoriaBoxHive";
+const String CategoryModelBoxHive = "CategoryModelBoxHive";
 //Shared Preferencs
 
 const String sharedPrefToken = "sharedPrefToken";
 const String sharedPrefIntro = "sharedPrefIntro";
 const String sharedPREF_TIME_PEDIDO = "PREF_TIME_PEDIDO";
 const String sharedPrefCARRITO_ID = "PREF_TEMP_CARRITO_ID";
+const String sharedTimeLoadingThings = "sharedTimeLoadingThings";
+const String sharedTimeLoadingThings2 = "sharedTimeLoadingThings2";
 //Colors
 final Color primaryColor = Color(convertColorHex("#004E98"));
 

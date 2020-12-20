@@ -51,7 +51,7 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
                           if(eventoo.data as bool){
                             locator<NavigationService>().navigateToClearStack(MainScreenViewRoute,arguments: TiendasPage());
                           }else{
-                            //siguiente pestaña
+                            locator<NavigationService>().navigateTo(SendMessagePageViewRote);
                           }
                           break;
                         case  ResourceState.ERROR :

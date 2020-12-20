@@ -40,21 +40,37 @@ class _AppBarMainState extends State<AppBarMain> {
                 onPressed: widget.searchpressed,
                 tooltip: 'Search',
               ),
-              box.isEmpty?Container(
-                margin: EdgeInsets.only(right: 10),
-                child: Image.asset(
-                  "assets/profile.png",
+              box.isEmpty?GestureDetector(
+                onTap: (){
+                  if(comprobarLogin()){
+                    locator<NavigationService>().navigateTo(ProfilePageViewRoute);
+                  }
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: Image.asset(
+                    "assets/profile.png",
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+              ):GestureDetector(
+                onTap: (){
+
+                  if(comprobarLogin()){
+                    locator<NavigationService>().navigateTo(ProfilePageViewRoute);
+                  }
+
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: 8),
                   width: 30,
                   height: 30,
-                ),
-              ):Container(
-                margin: EdgeInsets.only(right: 8),
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: NetworkImage((box.getAt(0) as UsuarioModel).uriImgPerfil),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: NetworkImage((box.getAt(0) as UsuarioModel).uriImgPerfil),
+                    ),
                   ),
                 ),
               ),

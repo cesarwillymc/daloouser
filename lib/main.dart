@@ -3,6 +3,9 @@ import 'package:daloouser/data/model/CarritoModel.dart';
 import 'package:daloouser/data/model/CarritoPriceModel.dart';
 import 'package:daloouser/data/model/DataServiceCarritoModel.dart';
 import 'package:daloouser/data/model/MapeoDepartamento.dart';
+import 'package:daloouser/data/model/Prices.dart';
+import 'package:daloouser/data/model/ProductoData.dart';
+import 'package:daloouser/data/model/ServiceModel.dart';
 import 'package:daloouser/data/model/UsuarioModel.dart';
 import 'package:daloouser/src/Router.dart';
 import 'package:daloouser/src/pages/TiendasPage.dart';
@@ -37,18 +40,26 @@ Future<List<Box>> _openBox() async {
   Hive.registerAdapter(DataServiceCarritoModelAdapter());
   Hive.registerAdapter(CarritoPriceModelAdapter());
 
+  Hive.registerAdapter(PricesAdapter());
+  Hive.registerAdapter(ProductoDataAdapter());
+  Hive.registerAdapter(ServiceModelAdapter());
+
   var boxcarritoPriceModel=await Hive.openBox<CarritoPriceModel>(priceCarritoBOXHIVE);
   var boxServiceItem=await Hive.openBox<ServiceItem>(recentSearchBOXHIVE);
   var boxCarritoModel=await Hive.openBox<CarritoModel>(carritoBOXHIVE);
   var boxUsuarioModel=await Hive.openBox<UsuarioModel>(usuarioBOXHIVE);
   var boxDataServiceCarritoModel=await Hive.openBox<DataServiceCarritoModel>(dataServiceBOXHIVE);
   var boxDataMapeoModel=await Hive.openBox<MapeoDepartamento>(polylineBOXHIVE);
+  var boxListaProductosCategoriaModel=await Hive.openBox<ListaProductosCategoria>(ListaProductosCategoriaBoxHive);
+  var boxCategoryModel=await Hive.openBox<CategoryModel>(CategoryModelBoxHive);
   boxList.add(boxcarritoPriceModel);
   boxList.add(boxServiceItem);
   boxList.add(boxCarritoModel);
   boxList.add(boxUsuarioModel);
   boxList.add(boxDataServiceCarritoModel);
   boxList.add(boxDataMapeoModel);
+  boxList.add(boxListaProductosCategoriaModel);
+  boxList.add(boxCategoryModel);
   shared=await SharedPreferences.getInstance();
   return boxList;
 }

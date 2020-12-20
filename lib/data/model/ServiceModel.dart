@@ -1,19 +1,37 @@
-class ServiceModel {
-  String id;
-  String name;
-  String address;
-  double latitude;
-  double longitude;
-  double altitude;
-  String category;
-  String description;
-  String horario;
-  bool activeAccount;
-  bool isOpen;
-  String imagen;
+import 'package:hive/hive.dart';
 
+part 'ServiceModel.g.dart';
+@HiveType(typeId: 10)
+class ServiceModel {
+  @HiveField(0)
+  String id;
+  @HiveField(1)
+  String name;
+  @HiveField(2)
+  String address;
+  @HiveField(3)
+  double latitude;
+  @HiveField(4)
+  double longitude;
+  @HiveField(5)
+  double altitude;
+  @HiveField(6)
+  String category;
+  @HiveField(7)
+  String description;
+  @HiveField(8)
+  String horario;
+  @HiveField(9)
+  bool activeAccount;
+  @HiveField(10)
+  bool isOpen;
+  @HiveField(11)
+  String imagen;
+  @HiveField(12)
   String serviceId;
+  @HiveField(13)
   String categoriaId;
+  @HiveField(14)
 
   String ratingNumber;
 

@@ -5,6 +5,8 @@ import 'package:daloouser/data/model/CategoriasModel.dart';
 import 'package:daloouser/data/model/CategoryModel.dart';
 import 'package:daloouser/data/model/ComentariosModel.dart';
 import 'package:daloouser/data/model/ComentariosStartModel.dart';
+import 'package:daloouser/data/model/HistoryModel.dart';
+import 'package:daloouser/data/model/HistoryModelItem.dart';
 import 'package:daloouser/data/model/ListServices.dart';
 import 'package:daloouser/data/model/ListaProducItem.dart';
 import 'package:daloouser/data/model/ListaProductosCategoria.dart';
@@ -336,7 +338,71 @@ class MainRepository{
       throw Exception("Error en la red ${response.statusCode}");
     }
   }
+  Future<List<HistoryModelItem>> getHistoryItems() async {
 
+    String url="customer/orders";
+    var palabraUrl=BASE_URL_API+url;
+    var token =shared.getString(sharedPrefToken);
+    final response =await http.get(palabraUrl,headers: {HttpHeaders.authorizationHeader:token} );
+    if(response.statusCode==200){
+      var respuesta= await Stream.fromIterable(jsonDecode(response.body)).asyncMap((event) => new HistoryModelItem.fromJson(event)).toList();
+      return respuesta;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<HistoryModel> getHistoryById(String id) async {
 
+    String url="customer/orders/$id";
+    var palabraUrl=BASE_URL_API+url;
+    var token =shared.getString(sharedPrefToken);
+    final response =await http.get(palabraUrl,headers: {HttpHeaders.authorizationHeader:token} );
+    if(response.statusCode==200){
+      var respuesta= HistoryModel.fromJson(jsonDecode(response.body));
+      return respuesta;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<String> descargarBoletaventa(String id) async {
+
+    String url="customer/pdfOrder/$id";
+    var palabraUrl=BASE_URL_API+url;
+    var token =shared.getString(sharedPrefToken);
+    final response =await http.get(palabraUrl,headers: {HttpHeaders.authorizationHeader:token} );
+    if(response.statusCode==200){
+      var respuesta= jsonDecode(response.body)["message"];
+      return respuesta;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+
+  Future<String> sendMessagePhone(String phone) async {
+
+    String url="customer/sendSMS";
+    var palabraUrl=BASE_URL_API+url;
+    var token =shared.getString(sharedPrefToken);
+    final response =await http.post(palabraUrl,body: sendCodeJson(phone),headers: {HttpHeaders.authorizationHeader:token} );
+    if(response.statusCode==200){
+      var respuesta= jsonDecode(response.body)["message"];
+      return respuesta;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
+  Future<String> validateCodePhone(String phone,String code) async {
+
+    String url="customer/validaSMS";
+    var palabraUrl=BASE_URL_API+url;
+    var token =shared.getString(sharedPrefToken);
+    final response =await http.post(palabraUrl,body: validateCodeJson(phone,code),headers: {HttpHeaders.authorizationHeader:token} );
+    if(response.statusCode==200){
+      var respuesta= jsonDecode(response.body)["message"];
+      return respuesta;
+    }else{
+      throw Exception("Error en la red ${response.statusCode}");
+    }
+  }
 
 }

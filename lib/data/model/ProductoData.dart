@@ -1,29 +1,52 @@
 import 'dart:convert';
 
 import 'package:daloouser/data/model/Prices.dart';
+import 'package:hive/hive.dart';
 
+part 'ProductoData.g.dart';
+@HiveType(typeId: 11)
 class ProductoData{
+  @HiveField(0)
   String id;
+  @HiveField(1)
   String namePriceGeneral;
+  @HiveField(2)
   bool status;
+  @HiveField(3)
   String subcategoryId;
+  @HiveField(4)
   String name;
+  @HiveField(5)
   String description;
+  @HiveField(6)
   String timePrepare;
+  @HiveField(7)
   double priceGeneral;
+  @HiveField(8)
   String serviceId;
+  @HiveField(9)
   String img;
+  @HiveField(10)
   String img2;
+  @HiveField(11)
   String subcategory;
+  @HiveField(12)
   List<Prices> prices=new List<Prices>();
 
   //Other
+  @HiveField(13)
   String servicename;
+  @HiveField(14)
   String address;
+  @HiveField(15)
   String horario;
+  @HiveField(16)
   double longitude;
+  @HiveField(17)
   double latitude;
+  @HiveField(18)
   double rating;
+  @HiveField(19)
   String itemname;
 
 
@@ -50,7 +73,6 @@ class ProductoData{
       this.itemname,);
 
   ProductoData.fromJson(Map<String, dynamic> json){
-    print("getListProductswithService product data ${json}");
     id = json['_id'];
     namePriceGeneral = json['namePriceGeneral'];
     status = json['status'] as bool;

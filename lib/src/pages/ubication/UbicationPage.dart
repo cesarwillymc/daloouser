@@ -105,24 +105,11 @@ class _UbicationPageState extends State<UbicationPage> {
       ),
       body: ViewModelBuilder<ProductsViewModel>.reactive(
         builder: (context, model, child) =>
-        model.busy
-            ? Center(
-          child: Text("Cargando"),
-        )
-            : model.permissionGranted
-            ? _kGooglePlex != null ? _googleMapsWidget() : Center(
+        !model.busy &&model.permissionGranted &&_kGooglePlex != null  ?  _googleMapsWidget(): Center(
           child: Row(
             children: [
               CircularProgressIndicator(),
               Text("Cargando")
-            ],
-          ),
-        )
-            : Center(
-          child: Row(
-            children: [
-              CircularProgressIndicator(),
-              Text("Permiso no aceptado")
             ],
           ),
         ),
